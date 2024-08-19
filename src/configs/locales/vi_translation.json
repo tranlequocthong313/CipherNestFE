@@ -60,5 +60,21 @@
       "listItem3": "",
       "listItem4": ""
     }
-  }
+  },
+  "add_cover_file": "Thêm Tệp Che Giấu",
+  "embed": "Nhúng",
+  "extract": "Trích Xuất",
+  "add_cover_file_tooltip": "Thêm Tệp Che Giấu",
+  "embed_tooltip": "Nhúng",
+  "extract_tooltip": "Trích Xuất",
+  "fileType": "Loại Tệp",
+  "fileName": "Tên Tệp",
+  "audioDuration": "Thời Lượng",
+  "fileSize": "Kích Thước Tệp",
+  "lastModified": "Ngày Sửa Đổi",
+  "fileType": "Loại Tệp",
+  "addSecret": "Thêm tệp bí mật",
+  "deleteFile": "Xóa tệp che giấu",
+  "pause": "Dừng",
+  "play": "Phát"
 }

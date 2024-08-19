@@ -1,100 +1,157 @@
-import React from 'react';
-import { Box, Button, Tooltip, IconButton } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import EmbedIcon from '@mui/icons-material/Download';
-import ExtractIcon from '@mui/icons-material/Upload';
-import useTheme from '../hooks/useTheme';
+import React from "react";
+import { Box, Button, Tooltip, IconButton } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import EmbedIcon from "@mui/icons-material/Download";
+import ExtractIcon from "@mui/icons-material/Upload";
+import useTheme from "../hooks/useTheme";
+import { useCoverFileDispatch } from "../hooks/useCoverFile";
+import { v4 as uuid } from "uuid";
+import { getDuration } from "../utils/audio";
+import { useTranslation } from "react-i18next";
+import { isValidFile } from "../utils/validator";
 
 const Toolbar: React.FC = () => {
     const { theme } = useTheme();
+    const dispatchCoverFiles = useCoverFileDispatch();
+    const { t } = useTranslation(); // Hook để dịch văn bản
+
+    // Handler cho việc chọn file
+    const handleFileUpload = async (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+        const files = event.target.files;
+        if (files) {
+            const newFileArray = await Promise.all(
+                Array.from(files).map(async (file) => {
+                    if (!isValidFile(file)) {
+                        return null; // Trả về null nếu file không hợp lệ
+                    }
+                    const duration = await getDuration(file);
+                    return {
+                        name: file.name,
+                        lastModified: file.lastModified,
+                        path: file.webkitRelativePath,
+                        size: file.size,
+                        type: file.type,
+                        id: uuid(), // Tạo ID duy nhất cho mỗi file
+                        blob: URL.createObjectURL(file),
+                        duration: duration,
+                    };
+                }),
+            );
+
+            const validFiles = newFileArray.filter(
+                (file): file is NonNullable<typeof file> => file !== null,
+            );
+
+            dispatchCoverFiles({
+                type: "ADD",
+                payload: validFiles,
+            });
+        }
+    };
 
     return (
         <Box
             sx={{
-                position: 'fixed',
-                top: 80,
+                position: "fixed",
+                top: 64,
                 left: 45,
                 right: 45,
                 backgroundColor: theme.palette.background.paper,
                 boxShadow: 3,
-                p: 1,
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                p: 2,
+                pt: 4,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
                 zIndex: 1200,
             }}
         >
-            <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                sx={{
-                    backgroundColor: theme.palette.primary.main,
-                    '&:hover': {
-                        backgroundColor: theme.palette.action.hover,
-                    },
-                    borderRadius: 2,
-                    textTransform: 'none',
-                    display: {
-                        xs: 'none',  // Ẩn button trên màn hình nhỏ
-                        sm: 'flex',  // Hiển thị button trên màn hình lớn
-                    },
-                }}
-            >
-                Add Cover File
-            </Button>
-            <Tooltip title="Add Cover File">
-                <IconButton
-                    color="primary"
+            <input
+                accept=".wav,.mp3,.flac"
+                style={{ display: "none" }}
+                id="upload-music-file"
+                type="file"
+                onChange={handleFileUpload}
+                multiple
+            />
+            <label htmlFor="upload-music-file">
+                <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    component="span"
                     sx={{
-                        backgroundColor: theme.palette.primary.main, // Màu nền của nút theo theme
-                        '&:hover': {
-                            backgroundColor: theme.palette.action.hover, // Màu nền khi hover
+                        backgroundColor: theme.palette.primary.main,
+                        "&:hover": {
+                            backgroundColor: theme.palette.action.selected,
                         },
                         borderRadius: 2,
+                        textTransform: "none",
                         display: {
-                            xs: 'flex',
-                            sm: 'none'
-                        }
+                            xs: "none", // Ẩn button trên màn hình nhỏ
+                            sm: "flex", // Hiển thị button trên màn hình lớn
+                        },
                     }}
                 >
-                    <AddIcon sx={{ color: theme.palette.background.default }} />
-                </IconButton>
-            </Tooltip>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    {t("add_cover_file")}
+                </Button>
+                <Tooltip title={t("add_cover_file_tooltip")}>
+                    <IconButton
+                        color="primary"
+                        component="span"
+                        sx={{
+                            backgroundColor: theme.palette.primary.main,
+                            "&:hover": {
+                                backgroundColor: theme.palette.action.selected,
+                            },
+                            borderRadius: 2,
+                            display: {
+                                xs: "flex",
+                                sm: "none",
+                            },
+                        }}
+                    >
+                        <AddIcon sx={{ color: theme.palette.background.default }} />
+                    </IconButton>
+                </Tooltip>
+            </label>
+
+            <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Button
                     variant="outlined"
                     startIcon={<EmbedIcon />}
                     sx={{
                         backgroundColor: theme.palette.background.paper,
-                        '&:hover': {
-                            backgroundColor: theme.palette.action.hover,
+                        "&:hover": {
+                            backgroundColor: theme.palette.action.selected,
                         },
                         borderRadius: 2,
-                        textTransform: 'none',
+                        textTransform: "none",
                         display: {
-                            xs: 'none',  // Ẩn button trên màn hình nhỏ
-                            sm: 'flex',  // Hiển thị button trên màn hình lớn
+                            xs: "none", // Ẩn button trên màn hình nhỏ
+                            sm: "flex", // Hiển thị button trên màn hình lớn
                         },
                         mr: 1,
                         color: theme.palette.text.primary,
                     }}
                 >
-                    Embed
+                    {t("embed")}
                 </Button>
-                <Tooltip title="Embed">
+                <Tooltip title={t("embed_tooltip")}>
                     <IconButton
                         color="primary"
                         sx={{
-                            backgroundColor: theme.palette.primary.main, // Màu nền của nút theo theme
-                            '&:hover': {
-                                backgroundColor: theme.palette.action.hover, // Màu nền khi hover
+                            backgroundColor: theme.palette.primary.main,
+                            "&:hover": {
+                                backgroundColor: theme.palette.action.selected,
                             },
                             borderRadius: 2,
                             display: {
-                                xs: 'flex',
-                                sm: 'none'
+                                xs: "flex",
+                                sm: "none",
                             },
-                            mx: 0.5
+                            mx: 0.5,
                         }}
                     >
                         <EmbedIcon sx={{ color: theme.palette.background.default }} />
@@ -105,34 +162,34 @@ const Toolbar: React.FC = () => {
                     startIcon={<ExtractIcon />}
                     sx={{
                         backgroundColor: theme.palette.background.paper,
-                        '&:hover': {
-                            backgroundColor: theme.palette.action.hover,
+                        "&:hover": {
+                            backgroundColor: theme.palette.action.selected,
                         },
                         borderRadius: 2,
-                        textTransform: 'none',
+                        textTransform: "none",
                         display: {
-                            xs: 'none',  // Ẩn button trên màn hình nhỏ
-                            sm: 'flex',  // Hiển thị button trên màn hình lớn
+                            xs: "none", // Ẩn button trên màn hình nhỏ
+                            sm: "flex", // Hiển thị button trên màn hình lớn
                         },
-                        color: theme.palette.text.primary
+                        color: theme.palette.text.primary,
                     }}
                 >
-                    Extract
+                    {t("extract")}
                 </Button>
-                <Tooltip title="Extract">
+                <Tooltip title={t("extract_tooltip")}>
                     <IconButton
                         color="primary"
                         sx={{
-                            backgroundColor: theme.palette.primary.main, // Màu nền của nút theo theme
-                            '&:hover': {
-                                backgroundColor: theme.palette.action.hover, // Màu nền khi hover
+                            backgroundColor: theme.palette.primary.main,
+                            "&:hover": {
+                                backgroundColor: theme.palette.action.selected,
                             },
                             borderRadius: 2,
                             display: {
-                                xs: 'flex',
-                                sm: 'none'
+                                xs: "flex",
+                                sm: "none",
                             },
-                            mx: 0.5
+                            mx: 0.5,
                         }}
                     >
                         <ExtractIcon sx={{ color: theme.palette.background.default }} />
