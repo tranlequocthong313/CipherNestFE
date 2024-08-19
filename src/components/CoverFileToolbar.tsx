@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Tooltip, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EmbedIcon from "@mui/icons-material/Download";
@@ -9,11 +9,13 @@ import { v4 as uuid } from "uuid";
 import { getDuration } from "../utils/audio";
 import { useTranslation } from "react-i18next";
 import { isValidFile } from "../utils/validator";
+import EmbedModal from "./EmbedModal";
 
 const CoverFileToolbar: React.FC = () => {
     const { theme } = useTheme();
     const dispatchCoverFiles = useCoverFileDispatch();
     const { t } = useTranslation(); // Hook để dịch văn bản
+    const [openModal, setOpenModal] = useState(false);
 
     // Handler cho việc chọn file
     const handleFileUpload = async (
@@ -119,6 +121,7 @@ const CoverFileToolbar: React.FC = () => {
 
             <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Button
+                    onClick={() => setOpenModal(true)}
                     variant="outlined"
                     startIcon={<EmbedIcon />}
                     sx={{
@@ -140,6 +143,7 @@ const CoverFileToolbar: React.FC = () => {
                 </Button>
                 <Tooltip title={t("embed_tooltip")}>
                     <IconButton
+                        onClick={() => setOpenModal(true)}
                         color="primary"
                         sx={{
                             backgroundColor: theme.palette.primary.main,
@@ -196,6 +200,8 @@ const CoverFileToolbar: React.FC = () => {
                     </IconButton>
                 </Tooltip>
             </Box>
+
+            <EmbedModal open={openModal} onClose={() => setOpenModal(false)} />
         </Box>
     );
 };
