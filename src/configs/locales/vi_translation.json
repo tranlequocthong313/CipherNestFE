@@ -1,0 +1,64 @@
+{
+  "tooltips": {
+    "settings": "Mở cài đặt",
+    "help": "Nhận trợ giúp",
+    "github": "Truy cập GitHub"
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "themeMode": "Chế độ chủ đề",
+    "darkMode": "Chế độ tối",
+    "language": "Ngôn ngữ",
+    "close": "Đóng"
+  },
+  "languages": {
+    "english": "Tiếng Anh",
+    "vietnamese": "Tiếng Việt"
+  },
+  "help": {
+    "title": "",
+    "section1": {
+      "title": "",
+      "item1": "",
+      "item2": "",
+      "item3": "",
+      "item4": "",
+      "item5": ""
+    },
+    "section2": {
+      "title": "",
+      "paragraph1": "",
+      "listItem1": "",
+      "listItem2": ""
+    },
+    "section3": {
+      "title": "",
+      "paragraph1": "",
+      "listItem1": ""
+    },
+    "section4": {
+      "title": "",
+      "paragraph1": "",
+      "listItem1": ""
+    },
+    "section5": {
+      "title": "",
+      "paragraph1": "",
+      "notice": ""
+    },
+    "section6": {
+      "title": "",
+      "paragraph1": "",
+      "listItem1": "",
+      "listItem2": "",
+      "listItem3": ""
+    },
+    "section7": {
+      "title": "",
+      "listItem1": "",
+      "listItem2": "",
+      "listItem3": "",
+      "listItem4": ""
+    }
+  }
+}

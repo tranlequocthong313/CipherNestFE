@@ -1,0 +1,64 @@
+{
+  "tooltips": {
+    "settings": "Open settings",
+    "help": "Get help",
+    "github": "Visit GitHub"
+  },
+  "settings": {
+    "title": "Settings",
+    "themeMode": "Theme Mode",
+    "darkMode": "Dark Mode",
+    "language": "Language",
+    "close": "Close"
+  },
+  "languages": {
+    "english": "English",
+    "vietnamese": "Vietnamese"
+  },
+  "help": {
+    "title": "",
+    "section1": {
+      "title": "",
+      "item1": "",
+      "item2": "",
+      "item3": "",
+      "item4": "",
+      "item5": ""
+    },
+    "section2": {
+      "title": "",
+      "paragraph1": "",
+      "listItem1": "",
+      "listItem2": ""
+    },
+    "section3": {
+      "title": "",
+      "paragraph1": "",
+      "listItem1": ""
+    },
+    "section4": {
+      "title": "",
+      "paragraph1": "",
+      "listItem1": ""
+    },
+    "section5": {
+      "title": "",
+      "paragraph1": "",
+      "notice": ""
+    },
+    "section6": {
+      "title": "",
+      "paragraph1": "",
+      "listItem1": "",
+      "listItem2": "",
+      "listItem3": ""
+    },
+    "section7": {
+      "title": "",
+      "listItem1": "",
+      "listItem2": "",
+      "listItem3": "",
+      "listItem4": ""
+    }
+  }
+}
