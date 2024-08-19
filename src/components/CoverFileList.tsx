@@ -120,7 +120,7 @@ const CoverFileList: React.FC = () => {
                             )) : (
                                 <TableRow>
                                     <TableCell colSpan={6} align="center">
-                                        Danh sách trống
+                                        {t("empty_list")}
                                     </TableCell>
                                 </TableRow>
                             )}
