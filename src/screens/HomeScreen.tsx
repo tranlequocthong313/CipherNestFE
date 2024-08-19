@@ -12,12 +12,12 @@ import HelpIcon from "@mui/icons-material/Help";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import CoverFileList from "../components/CoverFileList";
 import SecretFileList from "../components/SecretFileList";
-import Toolbar from "../components/Toolbar";
+import CoverFileToolbar from "../components/CoverFileToolbar";
 
 const HomeScreen: React.FC = () => {
     return (
         <>
-            <Toolbar />
+            <CoverFileToolbar />
             <Container maxWidth={false} sx={{ padding: 0, marginTop: "72px" }}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>

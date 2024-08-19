@@ -80,5 +80,15 @@
   "confirmDeleteTitle": "Xác nhận xóa",
   "confirmDeleteMessage": "Bạn có chắc chắn muốn xóa tệp này? Hành động này không thể hoàn tác.",
   "cancel": "Hủy",
-  "confirm": "Xóa"
+  "confirm": "Xóa",
+  "outputQuality": "Chất lượng đầu ra",
+  "low": "Thấp",
+  "normal": "Bình thường",
+  "high": "Cao",
+  "freeSpaceForSecretFile": "Dung lượng trống cho tệp bí mật",
+  "fileType": "Loại tệp",
+  "fileName": "Tên tệp",
+  "fileSize": "Kích thước",
+  "lastModified": "Sửa đổi lần cuối",
+  "emptyList": "Danh sách trống"
 }
