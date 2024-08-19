@@ -101,5 +101,6 @@
   "start_embedding": "Start Embedding",
   "confirm_password": "Confirm Password",
   "password_mismatch": "Password Mismatch",
-  "empty_list": "Empty List"
+  "empty_list": "Empty List",
+  "passwordRequired": "Password Required"
 }

@@ -30,6 +30,7 @@ import { useTheme } from "@mui/material/styles"; // Updated import
 import AudioPlay from "./AudioPlay";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import ConfirmDialog from './ConfirmDialog'
+import PasswordModal from "./PasswordModal";
 
 const Mp3Icon = styled(MusicNoteIcon)(({ theme }) => ({
     marginRight: theme.spacing(1),
@@ -76,6 +77,7 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
     const { t } = useTranslation(); // Khai báo hàm t từ useTranslation
     const Icon = icons[file.type] || Mp3Icon;
     const [openConfirm, setOpenConfirm] = useState(false);
+    const [openPasswordModal, setOpenPasswordModal] = useState(false);
 
     const handleOpenConfirm = () => {
         setOpenConfirm(true);
@@ -90,72 +92,97 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
         handleCloseConfirm(); // Đóng hộp thoại
     };
 
+    const handleOpenPasswordModal = () => {
+        setOpenPasswordModal(true);
+        onSelect()
+        console.log("OPEN")
+    };
+
+    const handleClosePasswordModal = () => {
+        setOpenPasswordModal(false);
+        console.log("CLOSE")
+    };
+
+    const handleUnlock = (password: string) => {
+        // Handle password unlock logic here
+        console.log("Unlocking with password:", password);
+    };
+
     return (
-        <StyledTableRow
-            theme={theme}
-            key={file.id}
-            isSelected={isSelected}
-            onClick={onSelect}
-        >
-            <TableCell sx={{ textAlign: "center" }}>
-                <Tooltip title={file.type}>
-                    <IconButton>
-                        <Icon />
-                    </IconButton>
-                </Tooltip>
-            </TableCell>
-            <TableCell sx={{ textAlign: "center" }}>
-                <Tooltip title={file.name}>
-                    <Typography>{file.name}</Typography>
-                </Tooltip>
-            </TableCell>
-            <TableCell sx={{ textAlign: "center" }}>
-                <Tooltip title={formatDuration(file.duration)}>
-                    <Typography>{formatDuration(file.duration)}</Typography>
-                </Tooltip>
-            </TableCell>
-            <TableCell sx={{ textAlign: "center" }}>
-                <Tooltip title={formatFileSize(file.size)}>
-                    <Typography>{formatFileSize(file.size)}</Typography>
-                </Tooltip>
-            </TableCell>
-            <TableCell sx={{ textAlign: "center" }}>
-                <Tooltip title={formatDateTime(file.lastModified)}>
-                    <Typography>{formatDateTime(file.lastModified)}</Typography>
-                </Tooltip>
-            </TableCell>
-            <TableCell sx={{ textAlign: "center" }}>
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
-                    <Tooltip title={t("addSecret")}>
-                        <IconButton onClick={onAddSecret}>
-                            <AddIcon />
+        <>
+            <StyledTableRow
+                theme={theme}
+                key={file.id}
+                isSelected={isSelected}
+                onClick={handleOpenPasswordModal}
+            >
+                <TableCell sx={{ textAlign: "center" }}>
+                    <Tooltip title={file.type}>
+                        <IconButton>
+                            <Icon />
                         </IconButton>
                     </Tooltip>
-                    <AudioPlay onPlay={onPlay} src={file.blob} id={file.id} />
-                    <Tooltip title={t("deleteFile")}>
-                        <IconButton onClick={handleOpenConfirm}>
-                            <DeleteIcon />
-                        </IconButton>
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                    <Tooltip title={file.name}>
+                        <Typography>{file.name}</Typography>
                     </Tooltip>
-                </Box>
-            </TableCell>
-            <ConfirmDialog
-                open={openConfirm}
-                onClose={handleCloseConfirm}
-                title={t("confirmDeleteTitle")}
-                message={t("confirmDeleteMessage")}
-                cancel={t("cancel")}
-                onCancel={handleCloseConfirm}
-                onConfirm={handleConfirmDelete}
-                confirm={t("confirm")}
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                    <Tooltip title={formatDuration(file.duration)}>
+                        <Typography>{formatDuration(file.duration)}</Typography>
+                    </Tooltip>
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                    <Tooltip title={formatFileSize(file.size)}>
+                        <Typography>{formatFileSize(file.size)}</Typography>
+                    </Tooltip>
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                    <Tooltip title={formatDateTime(file.lastModified)}>
+                        <Typography>{formatDateTime(file.lastModified)}</Typography>
+                    </Tooltip>
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <Tooltip title={t("addSecret")}>
+                            <IconButton onClick={onAddSecret}>
+                                <AddIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <AudioPlay onPlay={onPlay} src={file.blob} id={file.id} />
+                        <Tooltip title={t("deleteFile")}>
+                            <IconButton onClick={handleOpenConfirm}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                </TableCell>
+                <ConfirmDialog
+                    open={openConfirm}
+                    onClose={handleCloseConfirm}
+                    title={t("confirmDeleteTitle")}
+                    message={t("confirmDeleteMessage")}
+                    cancel={t("cancel")}
+                    onCancel={handleCloseConfirm}
+                    onConfirm={handleConfirmDelete}
+                    confirm={t("confirm")}
+                />
+            </StyledTableRow >
+
+            <PasswordModal
+                open={openPasswordModal}
+                onClose={handleClosePasswordModal}
+                onUnlock={handleUnlock}
+                fileName={file.name}
             />
-        </StyledTableRow >
+        </>
     );
 };
 
