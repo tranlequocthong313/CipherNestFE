@@ -16,13 +16,16 @@ const coverFileReducer = (
         console.log(action);
         console.groupEnd();
     }
+
     switch (action.type) {
         case "ADD":
+            const { files } = action.payload
+
             return {
                 ...state,
                 files: [
                     ...state.files,
-                    ...action.payload.filter(
+                    ...files.filter(
                         (newFile) =>
                             !state.files.some(
                                 (existingFile) =>
@@ -42,6 +45,8 @@ const coverFileReducer = (
                 ...state,
                 files: state.files.filter((file) => file.id !== action.payload.id),
             };
+        case "DELETE_ALL":
+            return initialCoverFilesState;
         default:
             return state;
     }

@@ -6,75 +6,90 @@ import {
     Typography,
     Tooltip,
     Box,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    DialogContentText,
-    Button
 } from "@mui/material";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import WavesIcon from "@mui/icons-material/Waves";
 import GraphicEq from "@mui/icons-material/GraphicEq";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import CodeIcon from "@mui/icons-material/Code";
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import MovieIcon from "@mui/icons-material/Movie";
+import AudiotrackIcon from "@mui/icons-material/Audiotrack";
+import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import ArticleIcon from "@mui/icons-material/Article";
+import DescriptionIcon from "@mui/icons-material/Description";
 import { styled } from "@mui/system";
-import { ICoverFile, ICoverFileItemProps } from "../interfaces/ICoverFile";
-import {
-    formatDateTime,
-    formatDuration,
-    formatFileSize,
-} from "../utils/formatter";
-import { SvgIconComponent } from "@mui/icons-material";
-import { useTheme } from "@mui/material/styles"; // Updated import
-import AudioPlay from "./AudioPlay";
-import { useTranslation } from "react-i18next"; // Import useTranslation
-import ConfirmDialog from './ConfirmDialog'
-
-const Mp3Icon = styled(MusicNoteIcon)(({ theme }) => ({
-    marginRight: theme.spacing(1),
-}));
-
-const WavIcon = styled(WavesIcon)(({ theme }) => ({
-    marginRight: theme.spacing(1),
-}));
-
-const FlacIcon = styled(GraphicEq)(({ theme }) => ({
-    marginRight: theme.spacing(1),
-}));
+import DeleteIcon from "@mui/icons-material/Delete";
+import { ISecretFileItemProps } from "../interfaces/ISecretFile";
+import { formatDateTime, formatFileSize } from "../utils/formatter";
+import { useTheme } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
+import ConfirmDialog from "./ConfirmDialog";
 
 const StyledTableRow = styled(TableRow, {
     shouldForwardProp: (prop) => prop !== "isSelected",
 })<{ isSelected: boolean }>(({ theme, isSelected }) => ({
     backgroundColor: isSelected
         ? theme.palette.action.selected
-        : theme.palette.background.paper, // Màu nền khi được chọn
-    cursor: "pointer", // Thay đổi con trỏ chuột khi hover
+        : theme.palette.background.paper,
+    cursor: "pointer",
     "&:hover": {
         backgroundColor: isSelected
-            ? theme.palette.action.selected // Nền khi được chọn
-            : theme.palette.action.hover, // Nền khi hover
+            ? theme.palette.action.selected
+            : theme.palette.action.hover,
     },
-    transition: "background-color 0.3s ease", // Hiệu ứng chuyển màu nền
+    transition: "background-color 0.3s ease",
 }));
 
 const icons: { [key: string]: React.ElementType } = {
-    "audio/mpeg": Mp3Icon,
-    "audio/x-wav": WavIcon,
-    "audio/flac": FlacIcon,
+    // Audio files
+    "audio/mpeg": AudiotrackIcon,
+    "audio/x-wav": WavesIcon,
+    "audio/flac": GraphicEq,
+    "audio/mp3": MusicNoteIcon,
+
+    // Video files
+    "video/mp4": VideoLibraryIcon,
+    "video/x-msvideo": MovieIcon,
+    "video/x-flv": MovieIcon,
+
+    // Image files
+    "image/jpeg": InsertPhotoIcon,
+    "image/png": InsertPhotoIcon,
+    "image/gif": InsertPhotoIcon,
+    "image/svg+xml": InsertPhotoIcon,
+
+    // Document files
+    "application/pdf": PictureAsPdfIcon,
+    "application/msword": DescriptionIcon,
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": DescriptionIcon,
+
+    // Code files
+    "text/html": CodeIcon,
+    "application/javascript": CodeIcon,
+    "application/x-python-code": CodeIcon,
+    "application/x-sh": CodeIcon,
+    "application/x-executable": CodeIcon,
+    "text/x-c": CodeIcon,
+    "text/x-c++src": CodeIcon,
+    "text/x-java": CodeIcon,
+
+    // Others
+    "application/octet-stream": InsertDriveFileIcon,
+    "text/plain": ArticleIcon,
 };
 
-const CoverFileItem: React.FC<ICoverFileItemProps> = ({
+const SecretFileItem: React.FC<ISecretFileItemProps> = ({
     file,
     isSelected,
     onSelect,
-    onAddSecret,
     onDelete,
-    onPlay,
 }) => {
     const theme = useTheme();
-    const { t } = useTranslation(); // Khai báo hàm t từ useTranslation
-    const Icon = icons[file.type] || Mp3Icon;
+    const { t } = useTranslation();
+    const Icon = icons[file.type] || InsertDriveFileIcon;
     const [openConfirm, setOpenConfirm] = useState(false);
 
     const handleOpenConfirm = () => {
@@ -110,11 +125,6 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                 </Tooltip>
             </TableCell>
             <TableCell sx={{ textAlign: "center" }}>
-                <Tooltip title={formatDuration(file.duration)}>
-                    <Typography>{formatDuration(file.duration)}</Typography>
-                </Tooltip>
-            </TableCell>
-            <TableCell sx={{ textAlign: "center" }}>
                 <Tooltip title={formatFileSize(file.size)}>
                     <Typography>{formatFileSize(file.size)}</Typography>
                 </Tooltip>
@@ -132,12 +142,6 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                         alignItems: "center",
                     }}
                 >
-                    <Tooltip title={t("addSecret")}>
-                        <IconButton onClick={onAddSecret}>
-                            <AddIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <AudioPlay onPlay={onPlay} src={file.blob} id={file.id} />
                     <Tooltip title={t("deleteFile")}>
                         <IconButton onClick={handleOpenConfirm}>
                             <DeleteIcon />
@@ -145,6 +149,7 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                     </Tooltip>
                 </Box>
             </TableCell>
+
             <ConfirmDialog
                 open={openConfirm}
                 onClose={handleCloseConfirm}
@@ -155,8 +160,8 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                 onConfirm={handleConfirmDelete}
                 confirm={t("confirm")}
             />
-        </StyledTableRow >
+        </StyledTableRow>
     );
 };
 
-export default CoverFileItem;
+export default SecretFileItem;

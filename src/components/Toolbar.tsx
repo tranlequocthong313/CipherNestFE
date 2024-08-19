@@ -46,7 +46,7 @@ const Toolbar: React.FC = () => {
 
             dispatchCoverFiles({
                 type: "ADD",
-                payload: validFiles,
+                payload: { files: validFiles },
             });
         }
     };

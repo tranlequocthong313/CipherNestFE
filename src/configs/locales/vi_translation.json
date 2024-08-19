@@ -76,5 +76,9 @@
   "addSecret": "Thêm tệp bí mật",
   "deleteFile": "Xóa tệp che giấu",
   "pause": "Dừng",
-  "play": "Phát"
+  "play": "Phát",
+  "confirmDeleteTitle": "Xác nhận xóa",
+  "confirmDeleteMessage": "Bạn có chắc chắn muốn xóa tệp này? Hành động này không thể hoàn tác.",
+  "cancel": "Hủy",
+  "confirm": "Xóa"
 }

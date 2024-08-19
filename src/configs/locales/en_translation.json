@@ -76,5 +76,9 @@
   "addSecret": "Add secret files",
   "deleteFile": "Delete cover file",
   "pause": "Pause",
-  "play": "Play"
+  "play": "Play",
+  "confirmDeleteTitle": "Confirm Deletion",
+  "confirmDeleteMessage": "Are you sure you want to delete this file? This action cannot be undone.",
+  "cancel": "Cancel",
+  "confirm": "Delete"
 }

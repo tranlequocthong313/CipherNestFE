@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import ThemeProvider from "./providers/ThemeProvider";
 import "./configs/i18n.ts";
 import CoverFileProvider from "./providers/CoverFileProvider";
+import SecretFileProvider from "./providers/SecretFileProvider";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement,
@@ -14,7 +15,9 @@ root.render(
     <React.StrictMode>
         <ThemeProvider>
             <CoverFileProvider>
-                <App />
+                <SecretFileProvider>
+                    <App />
+                </SecretFileProvider>
             </CoverFileProvider>
         </ThemeProvider>
     </React.StrictMode>,
