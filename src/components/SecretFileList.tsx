@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
     Table,
     TableBody,
@@ -9,9 +9,9 @@ import {
     Paper,
     IconButton,
     Typography,
-} from '@mui/material';
-import AudiotrackIcon from '@mui/icons-material/Audiotrack';
-import { styled } from '@mui/system';
+} from "@mui/material";
+import AudiotrackIcon from "@mui/icons-material/Audiotrack";
+import { styled } from "@mui/system";
 
 interface ISecretFile {
     name: string;
@@ -50,7 +50,7 @@ const SecretFileList: React.FC = () => {
                 accept="audio/*"
                 multiple
                 onChange={handleFileChange}
-                style={{ marginBottom: '20px' }}
+                style={{ marginBottom: "20px" }}
             />
             <TableContainer component={Paper}>
                 <Table>

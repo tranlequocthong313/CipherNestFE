@@ -60,5 +60,21 @@
       "listItem3": "",
       "listItem4": ""
     }
-  }
+  },
+  "add_cover_file": "Add Cover File",
+  "embed": "Embed",
+  "extract": "Extract",
+  "add_cover_file_tooltip": "Add Cover File",
+  "embed_tooltip": "Embed",
+  "extract_tooltip": "Extract",
+  "fileType": "File Type",
+  "fileName": "File Name",
+  "audioDuration": "Audio Duration",
+  "fileSize": "File Size",
+  "lastModified": "Last Modified",
+  "fileType": "File Type",
+  "addSecret": "Add secret files",
+  "deleteFile": "Delete cover file",
+  "pause": "Pause",
+  "play": "Play"
 }
