@@ -10,7 +10,7 @@ import { getDuration } from "../utils/audio";
 import { useTranslation } from "react-i18next";
 import { isValidFile } from "../utils/validator";
 
-const Toolbar: React.FC = () => {
+const CoverFileToolbar: React.FC = () => {
     const { theme } = useTheme();
     const dispatchCoverFiles = useCoverFileDispatch();
     const { t } = useTranslation(); // Hook để dịch văn bản
@@ -200,4 +200,4 @@ const Toolbar: React.FC = () => {
     );
 };
 
-export default Toolbar;
+export default CoverFileToolbar;

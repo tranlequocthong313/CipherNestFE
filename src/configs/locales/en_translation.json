@@ -80,5 +80,15 @@
   "confirmDeleteTitle": "Confirm Deletion",
   "confirmDeleteMessage": "Are you sure you want to delete this file? This action cannot be undone.",
   "cancel": "Cancel",
-  "confirm": "Delete"
+  "confirm": "Delete",
+  "outputQuality": "Output Quality",
+  "low": "Low",
+  "normal": "Normal",
+  "high": "High",
+  "freeSpaceForSecretFile": "Free Space for Secret File",
+  "fileType": "File Type",
+  "fileName": "File Name",
+  "fileSize": "File Size",
+  "lastModified": "Last Modified",
+  "emptyList": "Empty List"
 }

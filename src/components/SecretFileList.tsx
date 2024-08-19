@@ -12,6 +12,7 @@ import {
 import SecretFileItem from "./SecretFileItem";
 import { useSecretFile, useSecretFileDispatch } from "../hooks/useSecretFile";
 import { useTranslation } from "react-i18next"; // Thêm import useTranslation
+import SecretFileToolbar from "./SecretFileToolbar";
 
 const SecretFileList: React.FC = () => {
     const { files, selectedId, selectedCoverFileId } = useSecretFile();
@@ -37,45 +38,49 @@ const SecretFileList: React.FC = () => {
     };
 
     return (
-        <TableContainer
-            component={Paper}
-            sx={{
-                maxHeight: 427,
-                overflow: "auto", // Kích hoạt cuộn khi cần
-            }}
-        >
-            <Table stickyHeader>
-                <TableHead>
-                    <TableRow>
-                        <TableCell sx={{ textAlign: "center" }}>{t("fileType")}</TableCell>
-                        <TableCell sx={{ textAlign: "center" }}>{t("fileName")}</TableCell>
-                        <TableCell sx={{ textAlign: "center" }}>{t("fileSize")}</TableCell>
-                        <TableCell sx={{ textAlign: "center" }}>
-                            {t("lastModified")}
-                        </TableCell>
-                        <TableCell sx={{ textAlign: "center" }}></TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {Object.keys(files).length && files[selectedCoverFileId] && files[selectedCoverFileId].length > 0 ?
-                        files[selectedCoverFileId].map((file) => (
-                            <SecretFileItem
-                                key={file.id}
-                                file={file}
-                                isSelected={file.id === selectedId}
-                                onSelect={() => handleSelect(file.id)}
-                                onDelete={() => handleDelete(file.id)}
-                            />
-                        )) : (
-                            <TableRow>
-                                <TableCell colSpan={6} align="center">
-                                    Danh sách trống
-                                </TableCell>
-                            </TableRow>
-                        )}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <>
+            <SecretFileToolbar />
+
+            <TableContainer
+                component={Paper}
+                sx={{
+                    maxHeight: 427,
+                    overflow: "auto", // Kích hoạt cuộn khi cần
+                }}
+            >
+                <Table stickyHeader>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{ textAlign: "center" }}>{t("fileType")}</TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>{t("fileName")}</TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>{t("fileSize")}</TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                                {t("lastModified")}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {Object.keys(files).length && files[selectedCoverFileId] && files[selectedCoverFileId].length > 0 ?
+                            files[selectedCoverFileId].map((file) => (
+                                <SecretFileItem
+                                    key={file.id}
+                                    file={file}
+                                    isSelected={file.id === selectedId}
+                                    onSelect={() => handleSelect(file.id)}
+                                    onDelete={() => handleDelete(file.id)}
+                                />
+                            )) : (
+                                <TableRow>
+                                    <TableCell colSpan={6} align="center">
+                                        Danh sách trống
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </>
     );
 };
 
