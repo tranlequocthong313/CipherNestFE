@@ -101,5 +101,6 @@
   "start_embedding": "Bắt Đầu Nhúng",
   "confirm_password": "Xác Nhận Mật Khẩu",
   "password_mismatch": "Mật Khẩu Không Khớp",
-  "empty_list": "Danh Sách Trống"
+  "empty_list": "Danh Sách Trống",
+  "passwordRequired": "Yêu Cầu Mật Khẩu"
 }
