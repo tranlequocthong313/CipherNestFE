@@ -28,7 +28,6 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
     const theme = useTheme();
     const { t } = useTranslation();
     const [algorithm, setAlgorithm] = useState("lsb");
-    const [compress, setCompress] = useState(false);
     const [encrypt, setEncrypt] = useState(false);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -38,10 +37,6 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
 
     const handleAlgorithmChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAlgorithm(event.target.value);
-    };
-
-    const handleCompressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCompress(event.target.checked);
     };
 
     const handleEncryptChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +63,7 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
 
     const handleStartEmbedding = () => {
         // Implement embedding logic here
-        console.log("Embedding started with options:", { algorithm, compress, encrypt, password });
+        console.log("Embedding started with options:", { algorithm, encrypt, password });
     };
 
     return (
@@ -134,10 +129,6 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
                             },
                         }}
                     >{t("options")}</FormLabel>
-                    <FormControlLabel
-                        control={<Switch checked={compress} onChange={handleCompressChange} />}
-                        label={t("compress")}
-                    />
                     <FormControlLabel
                         control={<Switch checked={encrypt} onChange={handleEncryptChange} />}
                         label={t("encrypt")}

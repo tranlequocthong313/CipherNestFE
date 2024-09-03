@@ -5,6 +5,7 @@ import { TCoverFileAction } from "../types/TCoverFile";
 export const initialCoverFilesState: ICoverFileState = {
     files: [],
     selectedId: "",
+    onActionSelectedId: "",
 };
 
 const coverFileReducer = (
@@ -18,6 +19,24 @@ const coverFileReducer = (
     }
 
     switch (action.type) {
+        case "UPDATE_INFO":
+            return {
+                ...state,
+                files: state.files.map(file => {
+                    if (file.id === action.payload.id) {
+                        return {
+                            ...file,
+                            ...action.payload.new_info
+                        }
+                    }
+                    return file
+                })
+            }
+        case "ON_ACTION_SELECT":
+            return {
+                ...state,
+                onActionSelectedId: action.payload.id,
+            };
         case "ADD":
             const { files } = action.payload
 
@@ -34,11 +53,14 @@ const coverFileReducer = (
                             ),
                     ),
                 ],
+                onActionSelectedId: files.length > 0 ? files[0].id : state.selectedId,
+                selectedId: files.length > 0 ? files[0].id : state.selectedId
             };
         case "SELECT":
             return {
                 ...state,
                 selectedId: action.payload.id,
+                onActionSelectedId: action.payload.id,
             };
         case "DELETE":
             return {

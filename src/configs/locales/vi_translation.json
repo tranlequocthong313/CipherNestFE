@@ -81,8 +81,10 @@
   "cancel": "Hủy",
   "confirm": "Xóa",
   "outputQuality": "Chất lượng đầu ra",
+  "very_low": "Rất Thấp",
   "low": "Thấp",
   "normal": "Bình thường",
+  "medium": "Bình thường",
   "high": "Cao",
   "freeSpaceForSecretFile": "Dung lượng trống cho tệp bí mật",
   "emptyList": "Danh sách trống",
@@ -102,5 +104,15 @@
   "confirm_password": "Xác Nhận Mật Khẩu",
   "password_mismatch": "Mật Khẩu Không Khớp",
   "empty_list": "Danh Sách Trống",
-  "passwordRequired": "Yêu Cầu Mật Khẩu"
+  "passwordRequired": "Yêu Cầu Mật Khẩu",
+  "title": "Tiêu Đề",
+  "message": "Tin nhắn",
+  "cancel": "Hủy",
+  "confirm": "Xác Nhận",
+  "information": "Thông Tin",
+  "ok": "Đồng Ý",
+  "fileExceedLimit": "Các tệp đã chọn vượt quá giới hạn {{limit}}",
+  "version": "Phiên Bản",
+  "numberOfHiddenFiles": "Số Lượng (tệp)",
+  "totalHiddenFileSize": "Kích thước"
 }

@@ -9,11 +9,15 @@ export interface ICoverFile {
     lastModified: number;
     blob: string;
     duration: number;
+    file?: File;
+    version?: string;
+    isEmbedded?: boolean;
 }
 
 export interface ICoverFileState {
     files: ICoverFile[];
     selectedId: string;
+    onActionSelectedId: string;
 }
 
 export interface ICoverFileItemProps {
@@ -32,5 +36,9 @@ export interface ICoverFilesProviderProps {
 export interface IAudioPlayProps {
     id: string;
     src: string;
-    onPlay?: () => void;
+    onPlay?: (e: any) => void;
+}
+
+export interface ICoverFileApi {
+    selectedCoverFile: () => ICoverFile | undefined
 }

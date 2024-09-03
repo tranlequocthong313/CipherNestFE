@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import {
+    CoverFileApiContext,
     CoverFileContext,
     CoverFileDispatchContext,
 } from "../contexts/CoverFileContext";
@@ -17,6 +18,16 @@ export const useCoverFileDispatch = () => {
     if (!context) {
         throw new Error(
             "useCoverFilesDispatch must be used within a CoverFilesProvider",
+        );
+    }
+    return context;
+};
+
+export const useCoverFileApi = () => {
+    const context = useContext(CoverFileApiContext);
+    if (!context) {
+        throw new Error(
+            "useCoverFileApi must be used within a CoverFilesProvider",
         );
     }
     return context;

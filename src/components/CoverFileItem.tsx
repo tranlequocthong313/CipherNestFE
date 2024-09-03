@@ -6,7 +6,6 @@ import {
     Typography,
     Tooltip,
     Box,
-    Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
@@ -29,8 +28,9 @@ import { SvgIconComponent } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles"; // Updated import
 import AudioPlay from "./AudioPlay";
 import { useTranslation } from "react-i18next"; // Import useTranslation
-import ConfirmDialog from './ConfirmDialog'
+import Dialog from './Dialog'
 import PasswordModal from "./PasswordModal";
+import { useCoverFileDispatch } from "../hooks/useCoverFile";
 
 const Mp3Icon = styled(MusicNoteIcon)(({ theme }) => ({
     marginRight: theme.spacing(1),
@@ -78,6 +78,7 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
     const Icon = icons[file.type] || Mp3Icon;
     const [openConfirm, setOpenConfirm] = useState(false);
     const [openPasswordModal, setOpenPasswordModal] = useState(false);
+    const dispatchCoverFile = useCoverFileDispatch()
 
     const handleOpenConfirm = () => {
         setOpenConfirm(true);
@@ -93,20 +94,25 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
     };
 
     const handleOpenPasswordModal = () => {
-        setOpenPasswordModal(true);
+        // setOpenPasswordModal(true);
         onSelect()
-        console.log("OPEN")
     };
 
     const handleClosePasswordModal = () => {
         setOpenPasswordModal(false);
-        console.log("CLOSE")
     };
 
     const handleUnlock = (password: string) => {
         // Handle password unlock logic here
         console.log("Unlocking with password:", password);
     };
+
+    const onActionSelect = (id: string) => {
+        dispatchCoverFile({
+            type: "ON_ACTION_SELECT",
+            payload: { id }
+        })
+    }
 
     return (
         <>
@@ -144,6 +150,11 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                     </Tooltip>
                 </TableCell>
                 <TableCell sx={{ textAlign: "center" }}>
+                    <Tooltip title={file.version}>
+                        <Typography>{file.version ? `v${file.version}` : '-'}</Typography>
+                    </Tooltip>
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
                     <Box
                         sx={{
                             display: "flex",
@@ -156,23 +167,35 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                                 <AddIcon />
                             </IconButton>
                         </Tooltip>
-                        <AudioPlay onPlay={onPlay} src={file.blob} id={file.id} />
+                        <AudioPlay onPlay={e => {
+                            e.stopPropagation()
+                            onActionSelect(file.id)
+                            if (onPlay) {
+                                onPlay()
+                            }
+                        }} src={file.blob} id={file.id} />
                         <Tooltip title={t("deleteFile")}>
-                            <IconButton onClick={handleOpenConfirm}>
+                            <IconButton
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Ngăn chặn sự kiện onClick lan truyền
+                                    onActionSelect(file.id)
+                                    handleOpenConfirm();
+                                }}
+                            >
                                 <DeleteIcon />
                             </IconButton>
                         </Tooltip>
                     </Box>
                 </TableCell>
-                <ConfirmDialog
+                <Dialog
                     open={openConfirm}
                     onClose={handleCloseConfirm}
                     title={t("confirmDeleteTitle")}
                     message={t("confirmDeleteMessage")}
-                    cancel={t("cancel")}
-                    onCancel={handleCloseConfirm}
-                    onConfirm={handleConfirmDelete}
-                    confirm={t("confirm")}
+                    secondary={t("cancel")}
+                    onSecondary={handleCloseConfirm}
+                    onPrimary={handleConfirmDelete}
+                    primary={t("confirm")}
                 />
             </StyledTableRow >
 

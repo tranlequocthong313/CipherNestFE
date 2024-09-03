@@ -10,12 +10,16 @@ import { getDuration } from "../utils/audio";
 import { useTranslation } from "react-i18next";
 import { isValidFile } from "../utils/validator";
 import EmbedModal from "./EmbedModal";
+import { ICoverFile } from "../interfaces/ICoverFile";
+import HTTP, { coverFileApis } from "../configs/api";
+import { useEmbed, useEmbedDispatch } from "../hooks/useEmbed";
 
 const CoverFileToolbar: React.FC = () => {
     const { theme } = useTheme();
     const dispatchCoverFiles = useCoverFileDispatch();
     const { t } = useTranslation(); // Hook để dịch văn bản
     const [openModal, setOpenModal] = useState(false);
+    const { outputQuality } = useEmbed()
 
     // Handler cho việc chọn file
     const handleFileUpload = async (
@@ -38,6 +42,7 @@ const CoverFileToolbar: React.FC = () => {
                         id: uuid(), // Tạo ID duy nhất cho mỗi file
                         blob: URL.createObjectURL(file),
                         duration: duration,
+                        file: file
                     };
                 }),
             );

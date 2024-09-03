@@ -1,3 +1,3 @@
 export const isValidFile = (file: File) => {
-    return file.name && file.size && file.lastModified && file.type;
+    return file.name && file.size >= 0 && file.lastModified;
 };

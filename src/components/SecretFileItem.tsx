@@ -26,7 +26,7 @@ import { ISecretFileItemProps } from "../interfaces/ISecretFile";
 import { formatDateTime, formatFileSize } from "../utils/formatter";
 import { useTheme } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
-import ConfirmDialog from "./ConfirmDialog";
+import Dialog from "./Dialog";
 
 const StyledTableRow = styled(TableRow, {
     shouldForwardProp: (prop) => prop !== "isSelected",
@@ -150,15 +150,15 @@ const SecretFileItem: React.FC<ISecretFileItemProps> = ({
                 </Box>
             </TableCell>
 
-            <ConfirmDialog
+            <Dialog
                 open={openConfirm}
                 onClose={handleCloseConfirm}
                 title={t("confirmDeleteTitle")}
                 message={t("confirmDeleteMessage")}
-                cancel={t("cancel")}
-                onCancel={handleCloseConfirm}
-                onConfirm={handleConfirmDelete}
-                confirm={t("confirm")}
+                secondary={t("cancel")}
+                onSecondary={handleCloseConfirm}
+                onPrimary={handleConfirmDelete}
+                primary={t("confirm")}
             />
         </StyledTableRow>
     );

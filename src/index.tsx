@@ -7,6 +7,7 @@ import ThemeProvider from "./providers/ThemeProvider";
 import "./configs/i18n.ts";
 import CoverFileProvider from "./providers/CoverFileProvider";
 import SecretFileProvider from "./providers/SecretFileProvider";
+import EmbedProvider from "./providers/EmbedProvider";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement,
@@ -16,7 +17,9 @@ root.render(
         <ThemeProvider>
             <CoverFileProvider>
                 <SecretFileProvider>
-                    <App />
+                    <EmbedProvider>
+                        <App />
+                    </EmbedProvider>
                 </SecretFileProvider>
             </CoverFileProvider>
         </ThemeProvider>

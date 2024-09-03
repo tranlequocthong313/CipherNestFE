@@ -1,11 +1,18 @@
 import { DEBUG } from "../configs/constant";
-import { ISecretFileState } from "../interfaces/ISecretFile";
+import { IEmbeddedSecretFile, ISecretFile, ISecretFileState } from "../interfaces/ISecretFile";
 import { TSecretFileAction } from "../types/TSecretFile";
 
 export const initialSecretFilesState: ISecretFileState = {
     files: {},
+    embeddedFiles: [],
     selectedId: "",
     selectedCoverFileId: "",
+    totalSecretFileSize: 0,
+    totalEmbeddedSecretFileSize: 0
+};
+
+const totalSize = (files: any[] = []) => {
+    return files.reduce((acc: number, file: ISecretFile | IEmbeddedSecretFile) => acc + file.size, 0);
 };
 
 const secretFileReducer = (
@@ -18,12 +25,19 @@ const secretFileReducer = (
         console.groupEnd();
     }
     switch (action.type) {
-        case "ADD":
+        case "ADD_EMBEDDED_SECRET_FILES": {
+            return {
+                ...state,
+                embeddedFiles: action.payload.files,
+                totalEmbeddedSecretFileSize: totalSize(action.payload.files)
+            };
+        }
+        case "ADD": {
             const { files } = action.payload
             if (!state.files[state.selectedCoverFileId]) {
                 state.files[state.selectedCoverFileId] = []
             }
-            return {
+            const newState = {
                 ...state,
                 files: {
                     ...state.files,
@@ -41,27 +55,34 @@ const secretFileReducer = (
                         ]
                 },
             };
+            newState.totalSecretFileSize = totalSize(newState.files[state.selectedCoverFileId])
+            return newState
+        }
         case "SELECT_COVER_FILE":
             return {
                 ...state,
                 selectedCoverFileId: action.payload.coverFileId,
+                totalSecretFileSize: totalSize(state.files[action.payload.coverFileId])
             };
         case "SELECT":
             return {
                 ...state,
                 selectedId: action.payload.id,
             };
-        case "DELETE":
+        case "DELETE": {
             const { id } = action.payload
-            return {
+            const newState = {
                 ...state,
                 files: {
                     ...state.files,
                     [state.selectedCoverFileId]: state.files[state.selectedCoverFileId].filter((file) => file.id !== id),
-                }
+                },
             };
+            newState.totalSecretFileSize = totalSize(newState.files[state.selectedCoverFileId])
+            return newState
+        }
         case "DELETE_BY_COVER_FILE":
-            delete state.files[state.selectedCoverFileId]
+            delete state.files[action.payload.selectedCoverFileId]
             return {
                 ...state,
             };

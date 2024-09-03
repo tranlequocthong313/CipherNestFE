@@ -18,12 +18,32 @@ import {
     Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { useEmbed, useEmbedDispatch } from "../hooks/useEmbed";
+import { OUTPUT_QUALITIES } from "../configs/constant";
+import { formatFileSize, formatPercentage } from "../utils/formatter";
+import { useSecretFileDispatch } from "../hooks/useSecretFile";
+import { useCoverFile } from "../hooks/useCoverFile";
 
 const SecretFileToolbar = () => {
     const { t } = useTranslation();
+    const { outputQuality, freeSpace, usedPercentage } = useEmbed()
+    const dispatchEmbed = useEmbedDispatch()
+    const dispatchSecretFile = useSecretFileDispatch()
+    const coverFileState = useCoverFile();
 
-    // Giả sử phần trăm trống còn lại là 70%, bạn có thể tính toán từ dữ liệu thực tế
-    const freeSpacePercentage = 70;
+    const onChangeQuality = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedValue = event.target.value;
+
+        dispatchEmbed({
+            type: 'CHANGE_OUTPUT_QUALITY',
+            payload: {
+                outputQuality: selectedValue
+            }
+        });
+        dispatchSecretFile({
+            type: 'DELETE_ALL',
+        })
+    };
 
     return (
         <Toolbar
@@ -56,25 +76,21 @@ const SecretFileToolbar = () => {
                 </FormLabel>
                 <RadioGroup
                     row
-                    defaultValue="normal"
+                    value={outputQuality}
                     aria-label="output quality"
                     name="output-quality"
+                    onChange={onChangeQuality}
                 >
-                    <FormControlLabel
-                        value="low"
-                        control={<Radio color="primary" />}
-                        label={t("low")}
-                    />
-                    <FormControlLabel
-                        value="normal"
-                        control={<Radio color="primary" />}
-                        label={t("normal")}
-                    />
-                    <FormControlLabel
-                        value="high"
-                        control={<Radio color="primary" />}
-                        label={t("high")}
-                    />
+                    {
+                        Object.values(OUTPUT_QUALITIES).map(quality =>
+                            <FormControlLabel
+                                key={quality}
+                                value={quality}
+                                control={<Radio color="primary" />}
+                                label={t(quality)}
+                            />
+                        )
+                    }
                 </RadioGroup>
             </FormControl>
 
@@ -85,13 +101,13 @@ const SecretFileToolbar = () => {
                     color="text.primary"
                     sx={{ mb: 1 }}
                 >
-                    {t("freeSpaceForSecretFile")}: 21.5 MB
+                    {t("freeSpaceForSecretFile")}: {formatFileSize(freeSpace)}
                 </Typography>
                 <LinearProgress
                     variant="determinate"
-                    value={freeSpacePercentage}
+                    value={usedPercentage}
                     sx={{
-                        height: 10,
+                        height: 20,
                         borderRadius: 5,
                         bgcolor: "action.selected",
                         "& .MuiLinearProgress-bar": {
@@ -104,7 +120,7 @@ const SecretFileToolbar = () => {
                     color="text.secondary"
                     sx={{ mt: 1, display: "block", textAlign: "right" }}
                 >
-                    {freeSpacePercentage}%
+                    {formatPercentage(usedPercentage)}
                 </Typography>
             </Box>
         </Toolbar>

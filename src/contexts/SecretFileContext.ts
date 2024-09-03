@@ -1,12 +1,10 @@
 import React, { createContext } from "react";
-import { ISecretFileState } from "../interfaces/ISecretFile";
+import { ISecretFileApi, ISecretFileState } from "../interfaces/ISecretFile";
+import { initialSecretFilesState } from "../reducers/secretFileReducer";
 import { TSecretFileAction } from "../types/TSecretFile";
 
-export const SecretFileContext = createContext<ISecretFileState>({
-    files: {},
-    selectedId: "",
-    selectedCoverFileId: "",
-});
+export const SecretFileContext = createContext<ISecretFileState>(initialSecretFilesState);
 export const SecretFileDispatchContext = createContext<
     React.Dispatch<TSecretFileAction> | undefined
 >(undefined);
+export const SecretFileApiContext = createContext<ISecretFileApi | undefined>(undefined);

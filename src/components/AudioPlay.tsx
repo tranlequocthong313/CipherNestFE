@@ -13,7 +13,7 @@ const AudioPlay: React.FC<IAudioPlayProps> = ({ src, id, onPlay }) => {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const audioRef = useRef<HTMLAudioElement | null>(null);
-    const { selectedId } = useCoverFile();
+    const { onActionSelectedId } = useCoverFile();
     const { theme } = useTheme();
     const { t } = useTranslation(); // Khai báo hàm t từ useTranslation
 
@@ -30,7 +30,7 @@ const AudioPlay: React.FC<IAudioPlayProps> = ({ src, id, onPlay }) => {
             audioElement.addEventListener("timeupdate", updateProgress);
             audioElement.addEventListener("loadedmetadata", updateProgress);
 
-            if (selectedId !== id) {
+            if (onActionSelectedId !== id) {
                 audioElement.pause();
                 audioElement.currentTime = 0; // Reset playback position
                 setIsPlaying(false);
@@ -41,9 +41,9 @@ const AudioPlay: React.FC<IAudioPlayProps> = ({ src, id, onPlay }) => {
                 audioElement.removeEventListener("loadedmetadata", updateProgress);
             };
         }
-    }, [src, selectedId, id]);
+    }, [src, onActionSelectedId, id]);
 
-    const handleClick = () => {
+    const handleClick = (e: any) => {
         if (audioRef.current) {
             if (isPlaying) {
                 audioRef.current.pause();
@@ -54,7 +54,7 @@ const AudioPlay: React.FC<IAudioPlayProps> = ({ src, id, onPlay }) => {
         }
 
         if (onPlay) {
-            onPlay();
+            onPlay(e);
         }
     };
 

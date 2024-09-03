@@ -9,17 +9,17 @@ import {
     Paper,
     Box,
 } from "@mui/material";
-import SecretFileItem from "./SecretFileItem";
-import { useSecretFile, useSecretFileDispatch } from "../hooks/useSecretFile";
+import EmbeddedSecretFileItem from "./EmbeddedSecretFileItem";
 import { useTranslation } from "react-i18next"; // Thêm import useTranslation
+import { useSecretFile, useSecretFileDispatch } from "../hooks/useSecretFile";
 
-const SecretFileList: React.FC = () => {
-    const { files, selectedId, selectedCoverFileId } = useSecretFile();
-    const dispatchSecretFile = useSecretFileDispatch();
+const EmbeddedSecretFileList: React.FC = () => {
+    const { embeddedFiles, selectedId, selectedCoverFileId } = useSecretFile()
+    const dispatchEmbeddedSecretFile = useSecretFileDispatch();
     const { t } = useTranslation(); // Khai báo hàm t từ useTranslation
 
     const handleSelect = (id: string) => {
-        dispatchSecretFile({
+        dispatchEmbeddedSecretFile({
             type: "SELECT",
             payload: { id },
         });
@@ -30,7 +30,7 @@ const SecretFileList: React.FC = () => {
     };
 
     const handleDelete = async (id: string) => {
-        dispatchSecretFile({
+        dispatchEmbeddedSecretFile({
             type: "DELETE",
             payload: { id },
         });
@@ -48,24 +48,19 @@ const SecretFileList: React.FC = () => {
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ textAlign: "center" }}>{t("fileType")}</TableCell>
+                            <TableCell sx={{ textAlign: "center" }}></TableCell>
                             <TableCell sx={{ textAlign: "center" }}>{t("fileName")}</TableCell>
                             <TableCell sx={{ textAlign: "center" }}>{t("fileSize")}</TableCell>
-                            <TableCell sx={{ textAlign: "center" }}>
-                                {t("lastModified")}
-                            </TableCell>
-                            <TableCell sx={{ textAlign: "center" }}></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {Object.keys(files).length && files[selectedCoverFileId] && files[selectedCoverFileId].length > 0 ?
-                            files[selectedCoverFileId].map((file) => (
-                                <SecretFileItem
+                        {embeddedFiles.length > 0 ?
+                            embeddedFiles.map((file) => (
+                                <EmbeddedSecretFileItem
                                     key={file.id}
                                     file={file}
                                     isSelected={file.id === selectedId}
                                     onSelect={() => handleSelect(file.id)}
-                                    onDelete={() => handleDelete(file.id)}
                                 />
                             )) : (
                                 <TableRow>
@@ -81,4 +76,4 @@ const SecretFileList: React.FC = () => {
     );
 };
 
-export default SecretFileList;
+export default EmbeddedSecretFileList;

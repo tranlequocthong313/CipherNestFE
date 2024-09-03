@@ -6,6 +6,7 @@ import coverFileReducer, {
     initialCoverFilesState,
 } from "../reducers/coverFileReducer";
 import {
+    CoverFileApiContext,
     CoverFileContext,
     CoverFileDispatchContext,
 } from "../contexts/CoverFileContext";
@@ -16,10 +17,16 @@ const CoverFileProvider: React.FC<IThemeProviderProps> = ({ children }) => {
         initialCoverFilesState,
     );
 
+    const selectedCoverFile = () => {
+        return coverFiles.files.find(coverFile => coverFile.id === coverFiles.selectedId)
+    }
+
     return (
         <CoverFileContext.Provider value={coverFiles}>
             <CoverFileDispatchContext.Provider value={dispatch}>
-                {children}
+                <CoverFileApiContext.Provider value={{ selectedCoverFile }}>
+                    {children}
+                </CoverFileApiContext.Provider>
             </CoverFileDispatchContext.Provider>
         </CoverFileContext.Provider>
     );

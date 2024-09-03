@@ -13,8 +13,14 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import CoverFileList from "../components/CoverFileList";
 import SecretFileList from "../components/SecretFileList";
 import CoverFileToolbar from "../components/CoverFileToolbar";
+import { useCoverFileApi } from "../hooks/useCoverFile";
+import EmbeddedSecretFileList from "../components/EmbeddedSecretFileList";
+import SecretFileToolbar from "../components/SecretFileToolbar";
+import EmbeddedSecretFileToolbar from "../components/EmbeddedSecretFileToolbar";
 
 const HomeScreen: React.FC = () => {
+    const coverFileApi = useCoverFileApi()
+
     return (
         <>
             <CoverFileToolbar />
@@ -24,7 +30,18 @@ const HomeScreen: React.FC = () => {
                         <CoverFileList />
                     </Grid>
                     <Grid item xs={12}>
-                        <SecretFileList />
+
+                        {coverFileApi.selectedCoverFile()?.isEmbedded ?
+                            <>
+                                <EmbeddedSecretFileToolbar />
+                                <EmbeddedSecretFileList />
+                            </>
+                            : // TODO Embedded Secret files
+                            <>
+                                <SecretFileToolbar />
+                                <SecretFileList />
+                            </>
+                        }
                     </Grid>
                 </Grid>
             </Container>

@@ -6,6 +6,7 @@ import secretFileReducer, {
     initialSecretFilesState,
 } from "../reducers/secretFileReducer";
 import {
+    SecretFileApiContext,
     SecretFileContext,
     SecretFileDispatchContext,
 } from "../contexts/SecretFileContext";
@@ -16,10 +17,16 @@ const SecretFileProvider: React.FC<IThemeProviderProps> = ({ children }) => {
         initialSecretFilesState,
     );
 
+    const secretFilesByCoverFile = () => {
+        return secretFiles.files[secretFiles.selectedCoverFileId] || []
+    }
+
     return (
         <SecretFileContext.Provider value={secretFiles}>
             <SecretFileDispatchContext.Provider value={dispatch}>
-                {children}
+                <SecretFileApiContext.Provider value={{ secretFilesByCoverFile }}>
+                    {children}
+                </SecretFileApiContext.Provider>
             </SecretFileDispatchContext.Provider>
         </SecretFileContext.Provider>
     );

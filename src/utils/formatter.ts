@@ -1,5 +1,14 @@
 export const formatFileSize = (size: number) => {
-    return `${(size / (1024 * 1024)).toFixed(2)} MB`;
+    const res = parseFloat((size / (1024 * 1024)).toFixed(1))
+    if (res > 0) {
+        return `${res} MB`;
+    } else {
+        return `${size} Bytes`;
+    }
+};
+
+export const formatPercentage = (number: number) => {
+    return `${number}%`;
 };
 
 export const formatDateTime = (timestamp: number) => {

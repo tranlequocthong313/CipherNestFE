@@ -7,12 +7,22 @@ export interface ISecretFile {
     size: number; // size in bytes
     type: string;
     lastModified: number;
+    file?: File;
+}
+
+export interface IEmbeddedSecretFile {
+    id: string;
+    name: string;
+    size: number; // size in bytes
 }
 
 export interface ISecretFileState {
     files: { [key: string]: ISecretFile[] };
     selectedId: string;
     selectedCoverFileId: string;
+    totalSecretFileSize: number;
+    embeddedFiles: IEmbeddedSecretFile[];
+    totalEmbeddedSecretFileSize: number;
 }
 
 export interface ISecretFileItemProps {
@@ -22,6 +32,16 @@ export interface ISecretFileItemProps {
     onDelete: () => void;
 }
 
+export interface IEmbeddedSecretFileItemProps {
+    file: IEmbeddedSecretFile;
+    isSelected: boolean;
+    onSelect: () => void;
+}
+
 export interface ISecretFilesProviderProps {
     children: ReactNode;
+}
+
+export interface ISecretFileApi {
+    secretFilesByCoverFile: () => ISecretFile[]
 }
