@@ -4,11 +4,9 @@ import { TEmbed } from "../types/TEmbed"
 
 export const initialEmbedState: IEmbedState = {
     outputQuality: localStorage.getItem(LOCAL_STORAGE_OUTPUT_QUALITY_KEY) || OUTPUT_QUALITIES.MEDIUM,
-    freeSpace: 0,
-    initFreeSpace: -1,
+    initFreeSpace: 0,
     compressed: JSON.parse(localStorage.getItem(LOCAL_STORAGE_COMPRESSED_KEY) || "false"),
     algorithm: localStorage.getItem(LOCAL_STORAGE_ALGORITHM_KEY) || ALGORITHMS.LSB,
-    usedPercentage: 0,
 }
 
 const embedReducer = (
@@ -22,16 +20,12 @@ const embedReducer = (
     }
     switch (action.type) {
         case "UPDATE_FREE_SPACE": {
-            const { totalSecretFileSize = 0, initFreeSpace } = action.payload
+            const { initFreeSpace } = action.payload
             if (initFreeSpace <= 0) {
                 throw new Error("Free space must be greater than 0")
             }
-            const usedPercentage = Math.min(Math.trunc((totalSecretFileSize / initFreeSpace) * 100), 100)
-            const freeSpace = initFreeSpace - totalSecretFileSize
             return {
                 ...state,
-                freeSpace,
-                usedPercentage,
                 initFreeSpace,
             }
         }
@@ -46,8 +40,6 @@ const embedReducer = (
             return {
                 ...state,
                 initFreeSpace: -1,
-                freeSpace: 0,
-                usedPercentage: 0,
             }
         default:
             return state

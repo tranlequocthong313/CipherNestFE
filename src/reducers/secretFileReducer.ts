@@ -62,7 +62,8 @@ const secretFileReducer = (
             return {
                 ...state,
                 selectedCoverFileId: action.payload.coverFileId,
-                totalSecretFileSize: totalSize(state.files[action.payload.coverFileId])
+                totalSecretFileSize: totalSize(state.files[action.payload.coverFileId]),
+                embeddedFiles: []
             };
         case "SELECT":
             return {

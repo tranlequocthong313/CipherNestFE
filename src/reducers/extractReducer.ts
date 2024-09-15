@@ -3,7 +3,8 @@ import { IExtractState } from "../interfaces/IExtract"
 import { TExtract } from "../types/TExtract"
 
 export const initialExtractState: IExtractState = {
-    passphrase: '',
+    isOpenPasswordModal: false,
+    isWrongPassword: false,
 }
 
 const embedReducer = (
@@ -16,6 +17,17 @@ const embedReducer = (
         console.groupEnd()
     }
     switch (action.type) {
+        case 'OPEN_PASSWORD_MODAL':
+            return {
+                ...state,
+                isOpenPasswordModal: true,
+                isWrongPassword: action.payload.isWrongPassword,
+            }
+        case 'CLOSE_PASSWORD_MODAL':
+            return {
+                ...state,
+                isOpenPasswordModal: false,
+            }
         default:
             return state
     }

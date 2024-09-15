@@ -105,6 +105,7 @@
   "password_mismatch": "Password Mismatch",
   "empty_list": "Empty List",
   "passwordRequired": "Password Required",
+  "wrongPassword": "Wrong Password",
   "title": "Title",
   "message": "Message",
   "cancel": "Cancel",
@@ -113,6 +114,6 @@
   "ok": "Ok",
   "fileExceedLimit": "Selected files exceed limit {{limit}}",
   "version": "Version",
-  "numberOfHiddenFiles": "Total (files)",
+  "numberOfHiddenFiles": "Total Files",
   "totalHiddenFileSize": "Size"
 }

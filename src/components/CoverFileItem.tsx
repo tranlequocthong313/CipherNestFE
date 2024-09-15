@@ -30,7 +30,8 @@ import AudioPlay from "./AudioPlay";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import Dialog from './Dialog'
 import PasswordModal from "./PasswordModal";
-import { useCoverFileDispatch } from "../hooks/useCoverFile";
+import { useCoverFileApi, useCoverFileDispatch } from "../hooks/useCoverFile";
+import { useExtract, useExtractDispatch } from "../hooks/useExtract";
 
 const Mp3Icon = styled(MusicNoteIcon)(({ theme }) => ({
     marginRight: theme.spacing(1),
@@ -74,11 +75,12 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
     onPlay,
 }) => {
     const theme = useTheme();
-    const { t } = useTranslation(); // Khai báo hàm t từ useTranslation
+    const { t } = useTranslation(); 
     const Icon = icons[file.type] || Mp3Icon;
     const [openConfirm, setOpenConfirm] = useState(false);
-    const [openPasswordModal, setOpenPasswordModal] = useState(false);
     const dispatchCoverFile = useCoverFileDispatch()
+    const dispatchExtract = useExtractDispatch()
+    const { selectedCoverFile } = useCoverFileApi()
 
     const handleOpenConfirm = () => {
         setOpenConfirm(true);
@@ -89,22 +91,14 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
     };
 
     const handleConfirmDelete = () => {
-        onDelete(); // Thực hiện hành động xóa
-        handleCloseConfirm(); // Đóng hộp thoại
-    };
-
-    const handleOpenPasswordModal = () => {
-        // setOpenPasswordModal(true);
-        onSelect()
+        onDelete(); 
+        handleCloseConfirm(); 
     };
 
     const handleClosePasswordModal = () => {
-        setOpenPasswordModal(false);
-    };
-
-    const handleUnlock = (password: string) => {
-        // Handle password unlock logic here
-        console.log("Unlocking with password:", password);
+        dispatchExtract({
+            type: 'CLOSE_PASSWORD_MODAL'
+        })
     };
 
     const onActionSelect = (id: string) => {
@@ -120,7 +114,7 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                 theme={theme}
                 key={file.id}
                 isSelected={isSelected}
-                onClick={handleOpenPasswordModal}
+                onClick={onSelect}
             >
                 <TableCell sx={{ textAlign: "center" }}>
                     <Tooltip title={file.type}>
@@ -162,11 +156,13 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                             alignItems: "center",
                         }}
                     >
-                        <Tooltip title={t("addSecret")}>
-                            <IconButton onClick={onAddSecret}>
-                                <AddIcon />
-                            </IconButton>
-                        </Tooltip>
+                        {!selectedCoverFile()?.isEmbedded ??
+                            <Tooltip title={t("addSecret")}>
+                                <IconButton onClick={onAddSecret}>
+                                    <AddIcon />
+                                </IconButton>
+                            </Tooltip>
+                        }
                         <AudioPlay onPlay={e => {
                             e.stopPropagation()
                             onActionSelect(file.id)
@@ -177,7 +173,7 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                         <Tooltip title={t("deleteFile")}>
                             <IconButton
                                 onClick={(e) => {
-                                    e.stopPropagation(); // Ngăn chặn sự kiện onClick lan truyền
+                                    e.stopPropagation(); 
                                     onActionSelect(file.id)
                                     handleOpenConfirm();
                                 }}
@@ -187,23 +183,16 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                         </Tooltip>
                     </Box>
                 </TableCell>
-                <Dialog
-                    open={openConfirm}
-                    onClose={handleCloseConfirm}
-                    title={t("confirmDeleteTitle")}
-                    message={t("confirmDeleteMessage")}
-                    secondary={t("cancel")}
-                    onSecondary={handleCloseConfirm}
-                    onPrimary={handleConfirmDelete}
-                    primary={t("confirm")}
-                />
             </StyledTableRow >
-
-            <PasswordModal
-                open={openPasswordModal}
-                onClose={handleClosePasswordModal}
-                onUnlock={handleUnlock}
-                fileName={file.name}
+            <Dialog
+                open={openConfirm}
+                onClose={handleCloseConfirm}
+                title={t("confirmDeleteTitle")}
+                message={t("confirmDeleteMessage")}
+                secondary={t("cancel")}
+                onSecondary={handleCloseConfirm}
+                onPrimary={handleConfirmDelete}
+                primary={t("confirm")}
             />
         </>
     );

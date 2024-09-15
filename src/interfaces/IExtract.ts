@@ -1,7 +1,8 @@
 import { ReactNode } from "react"
 
 export interface IExtractState {
-    passphrase: string
+    isOpenPasswordModal: boolean
+    isWrongPassword: boolean
 }
 
 export interface IExtractProps {

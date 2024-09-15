@@ -1,12 +1,15 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import embedReducer, { initialEmbedState } from '../reducers/embedReducer';
-import { EmbedContext, EmbedDispatchContext } from '../contexts/EmbedContext';
+import { EmbedApiContext, EmbedContext, EmbedDispatchContext } from '../contexts/EmbedContext';
 import { IEmbedProps } from '../interfaces/IEmbed';
 import HTTP, { coverFileApis } from '../configs/api';
 import { useCoverFile, useCoverFileDispatch } from '../hooks/useCoverFile';
 import { useSecretFile, useSecretFileDispatch } from '../hooks/useSecretFile';
 import { CODES, DEBUG } from '../configs/constant';
 import { v4 as uuid } from "uuid";
+import axios from 'axios';
+import { useExtract, useExtractDispatch } from '../hooks/useExtract';
+import { ICoverFile } from '../interfaces/ICoverFile';
 
 const EmbedProvider: React.FC<IEmbedProps> = ({ children }) => {
     const [embed, dispatch] = useReducer(embedReducer, initialEmbedState);
@@ -15,6 +18,7 @@ const EmbedProvider: React.FC<IEmbedProps> = ({ children }) => {
     const dispatchCoverFile = useCoverFileDispatch()
     const dispatchSecretFile = useSecretFileDispatch()
     const [isLoading, setIsLoading] = useState(false);
+    const dispatchExtract = useExtractDispatch()
 
     const openLoading = () => {
         setIsLoading(true)
@@ -24,75 +28,91 @@ const EmbedProvider: React.FC<IEmbedProps> = ({ children }) => {
         setIsLoading(false)
     }
 
-    useEffect(() => {
-        const updateEmbedStatus = async () => {
-            const form = new FormData();
-            const coverFile = coverFileState.files.find(
-                (coverFile) => coverFile.id === coverFileState.selectedId
-            );
-            if (!coverFile || !coverFile.file) {
-                return;
-            }
-            form.append('cover_file', coverFile.file);
-            form.append('output_quality', embed.outputQuality);
-            try {
-                openLoading()
+    const updateEmbedStatus = async ({
+        password = undefined,
+        coverFileId = coverFileState.selectedId,
+        coverFile = undefined,
+        outputQuality = embed.outputQuality,
+    }: {
+        password?: string,
+        coverFileId?: string,
+        coverFile?: ICoverFile,
+        outputQuality?: string,
+    }) => {
+        const form = new FormData();
+        const _coverFile = coverFile || coverFileState.files.find(
+            (coverFile) => coverFile.id === coverFileId
+        );
+        if (!_coverFile || !_coverFile.file) {
+            return;
+        }
+        form.append('cover_file', _coverFile.file);
+        form.append('output_quality', outputQuality);
+        if (password) {
+            form.append('password', password);
+        }
+        try {
+            openLoading()
 
-                const res = await HTTP.post(coverFileApis.coverFileInformation, form);
-                if (res.data.code === CODES.IS_EMBEDDED_BY_SYSTEM) {
-                    const version = res.data.data.version
-                    const filenames = res.data.data.filenames
-                    const sizes = res.data.data.sizes
-                    const files = filenames.map((filename: string, index: number) => {
-                        return {
-                            id: uuid(),
-                            name: filename,
-                            size: sizes[index]
+            const res = await HTTP.post(coverFileApis.coverFileInformation, form);
+            if (res.data.code === CODES.IS_EMBEDDED_BY_SYSTEM) {
+                const version = res.data.data.version
+                const filenames = res.data.data.filenames
+                const sizes = res.data.data.sizes
+                const files = filenames.map((filename: string, index: number) => {
+                    return {
+                        id: uuid(),
+                        name: filename,
+                        size: sizes[index]
+                    }
+                })
+                dispatchCoverFile({
+                    type: 'UPDATE_INFO',
+                    payload: {
+                        new_info: {
+                            isEmbedded: true,
+                            version
+                        }
+                    }
+                })
+                dispatchSecretFile({
+                    type: 'ADD_EMBEDDED_SECRET_FILES',
+                    payload: { files }
+                })
+            } else {
+                dispatch({
+                    type: 'UPDATE_FREE_SPACE',
+                    payload: {
+                        initFreeSpace: res.data.data,
+                    },
+                });
+            }
+        } catch (err) {
+            if (DEBUG) {
+                console.error('GET COVER FILE INFORMATION ERR:::', err);
+            }
+            if (axios.isAxiosError(err) && err.response) {
+                if (!err.response.data) { return }
+                if ([CODES.REQUIRE_PASSWORD, CODES.WRONG_PASSWORD].includes(err.response.data.code)) {
+                    dispatchExtract({
+                        type: 'OPEN_PASSWORD_MODAL',
+                        payload: {
+                            isWrongPassword: err.response.data.code === CODES.WRONG_PASSWORD
                         }
                     })
-                    dispatchCoverFile({
-                        type: 'UPDATE_INFO',
-                        payload: {
-                            id: coverFileState.selectedId,
-                            new_info: {
-                                isEmbedded: true,
-                                version
-                            }
-                        }
-                    })
-                    dispatchSecretFile({
-                        type: 'ADD_EMBEDDED_SECRET_FILES',
-                        payload: { files }
-                    })
-                } else {
-                    dispatch({
-                        type: 'UPDATE_FREE_SPACE',
-                        payload: {
-                            initFreeSpace: res.data.data,
-                            totalSecretFileSize: secretFileState.totalSecretFileSize,
-                        },
-                    });
                 }
-            } catch (err) {
-                if (DEBUG) {
-                    console.error('GET COVER FILE INFORMATION ERR:::', err);
-                }
-            } finally {
-                closeLoading()
             }
-        };
-
-        updateEmbedStatus();
-    }, [
-        coverFileState.selectedId,
-        embed.outputQuality,
-        secretFileState.totalSecretFileSize
-    ]);
+        } finally {
+            closeLoading()
+        }
+    };
 
     return (
         <EmbedContext.Provider value={{ ...embed, isLoading }}>
             <EmbedDispatchContext.Provider value={dispatch}>
-                {children}
+                <EmbedApiContext.Provider value={{ updateEmbedStatus }}>
+                    {children}
+                </EmbedApiContext.Provider>
             </EmbedDispatchContext.Provider>
         </EmbedContext.Provider>
     );

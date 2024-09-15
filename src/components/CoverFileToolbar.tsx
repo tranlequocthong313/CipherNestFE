@@ -12,16 +12,16 @@ import { isValidFile } from "../utils/validator";
 import EmbedModal from "./EmbedModal";
 import { ICoverFile } from "../interfaces/ICoverFile";
 import HTTP, { coverFileApis } from "../configs/api";
-import { useEmbed, useEmbedDispatch } from "../hooks/useEmbed";
+import { useEmbed, useEmbedApi, useEmbedDispatch } from "../hooks/useEmbed";
 
 const CoverFileToolbar: React.FC = () => {
     const { theme } = useTheme();
     const dispatchCoverFiles = useCoverFileDispatch();
-    const { t } = useTranslation(); // Hook để dịch văn bản
+    const { t } = useTranslation(); 
     const [openModal, setOpenModal] = useState(false);
     const { outputQuality } = useEmbed()
+    const { updateEmbedStatus } = useEmbedApi()
 
-    // Handler cho việc chọn file
     const handleFileUpload = async (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
@@ -30,7 +30,7 @@ const CoverFileToolbar: React.FC = () => {
             const newFileArray = await Promise.all(
                 Array.from(files).map(async (file) => {
                     if (!isValidFile(file)) {
-                        return null; // Trả về null nếu file không hợp lệ
+                        return null; 
                     }
                     const duration = await getDuration(file);
                     return {
@@ -39,7 +39,7 @@ const CoverFileToolbar: React.FC = () => {
                         path: file.webkitRelativePath,
                         size: file.size,
                         type: file.type,
-                        id: uuid(), // Tạo ID duy nhất cho mỗi file
+                        id: uuid(), 
                         blob: URL.createObjectURL(file),
                         duration: duration,
                         file: file
@@ -55,6 +55,8 @@ const CoverFileToolbar: React.FC = () => {
                 type: "ADD",
                 payload: { files: validFiles },
             });
+
+            await updateEmbedStatus({ coverFile: validFiles[0] })
         }
     };
 
@@ -96,8 +98,8 @@ const CoverFileToolbar: React.FC = () => {
                         borderRadius: 2,
                         textTransform: "none",
                         display: {
-                            xs: "none", // Ẩn button trên màn hình nhỏ
-                            sm: "flex", // Hiển thị button trên màn hình lớn
+                            xs: "none", 
+                            sm: "flex",
                         },
                     }}
                 >
@@ -137,8 +139,8 @@ const CoverFileToolbar: React.FC = () => {
                         borderRadius: 2,
                         textTransform: "none",
                         display: {
-                            xs: "none", // Ẩn button trên màn hình nhỏ
-                            sm: "flex", // Hiển thị button trên màn hình lớn
+                            xs: "none", 
+                            sm: "flex",
                         },
                         mr: 1,
                         color: theme.palette.text.primary,
@@ -177,8 +179,8 @@ const CoverFileToolbar: React.FC = () => {
                         borderRadius: 2,
                         textTransform: "none",
                         display: {
-                            xs: "none", // Ẩn button trên màn hình nhỏ
-                            sm: "flex", // Hiển thị button trên màn hình lớn
+                            xs: "none", 
+                            sm: "flex",
                         },
                         color: theme.palette.text.primary,
                     }}

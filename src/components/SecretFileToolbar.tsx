@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Table,
     TableBody,
@@ -18,18 +18,27 @@ import {
     Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useEmbed, useEmbedDispatch } from "../hooks/useEmbed";
+import { useEmbed, useEmbedApi, useEmbedDispatch } from "../hooks/useEmbed";
 import { OUTPUT_QUALITIES } from "../configs/constant";
 import { formatFileSize, formatPercentage } from "../utils/formatter";
-import { useSecretFileDispatch } from "../hooks/useSecretFile";
+import { useSecretFile, useSecretFileDispatch } from "../hooks/useSecretFile";
 import { useCoverFile } from "../hooks/useCoverFile";
 
 const SecretFileToolbar = () => {
     const { t } = useTranslation();
-    const { outputQuality, freeSpace, usedPercentage } = useEmbed()
+    const { outputQuality, initFreeSpace } = useEmbed()
     const dispatchEmbed = useEmbedDispatch()
     const dispatchSecretFile = useSecretFileDispatch()
     const coverFileState = useCoverFile();
+    const { updateEmbedStatus } = useEmbedApi()
+    const { totalSecretFileSize } = useSecretFile()
+    const [freeSpace, setFreeSpace] = useState(0)
+    const [usedPercentage, setUsedPercentage] = useState(0)
+
+    useEffect(() => {
+        setUsedPercentage(Math.min(Math.trunc((totalSecretFileSize / initFreeSpace) * 100), 100))
+        setFreeSpace(initFreeSpace - totalSecretFileSize)
+    }, [initFreeSpace, totalSecretFileSize])
 
     const onChangeQuality = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedValue = event.target.value;
@@ -42,6 +51,9 @@ const SecretFileToolbar = () => {
         });
         dispatchSecretFile({
             type: 'DELETE_ALL',
+        })
+        updateEmbedStatus({
+            outputQuality: selectedValue
         })
     };
 

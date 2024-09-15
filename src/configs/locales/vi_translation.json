@@ -105,6 +105,7 @@
   "password_mismatch": "Mật Khẩu Không Khớp",
   "empty_list": "Danh Sách Trống",
   "passwordRequired": "Yêu Cầu Mật Khẩu",
+  "wrongPassword": "Mật Khẩu Không Chính Xác",
   "title": "Tiêu Đề",
   "message": "Tin nhắn",
   "cancel": "Hủy",
@@ -113,6 +114,6 @@
   "ok": "Đồng Ý",
   "fileExceedLimit": "Các tệp đã chọn vượt quá giới hạn {{limit}}",
   "version": "Phiên Bản",
-  "numberOfHiddenFiles": "Số Lượng (tệp)",
+  "numberOfHiddenFiles": "Số Lượng Tệp",
   "totalHiddenFileSize": "Kích thước"
 }

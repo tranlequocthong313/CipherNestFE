@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { EmbedContext, EmbedDispatchContext } from "../contexts/EmbedContext";
+import { EmbedApiContext, EmbedContext, EmbedDispatchContext } from "../contexts/EmbedContext";
 
 export const useEmbed = () => {
     const context = useContext(EmbedContext);
@@ -15,6 +15,14 @@ export const useEmbedDispatch = () => {
         throw new Error(
             "useEmbedDispatch must be used within a EmbedProvider",
         );
+    }
+    return context;
+};
+
+export const useEmbedApi = () => {
+    const context = useContext(EmbedApiContext);
+    if (!context) {
+        throw new Error("useEmbedApi must be used within a EmbedProvider");
     }
     return context;
 };

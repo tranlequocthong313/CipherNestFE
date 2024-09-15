@@ -23,7 +23,7 @@ const coverFileReducer = (
             return {
                 ...state,
                 files: state.files.map(file => {
-                    if (file.id === action.payload.id) {
+                    if (file.id === state.selectedId) {
                         return {
                             ...file,
                             ...action.payload.new_info
@@ -66,6 +66,8 @@ const coverFileReducer = (
             return {
                 ...state,
                 files: state.files.filter((file) => file.id !== action.payload.id),
+                selectedId: '',
+                onActionSelectedId: ''
             };
         case "DELETE_ALL":
             return initialCoverFilesState;

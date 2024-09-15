@@ -8,6 +8,7 @@ import "./configs/i18n.ts";
 import CoverFileProvider from "./providers/CoverFileProvider";
 import SecretFileProvider from "./providers/SecretFileProvider";
 import EmbedProvider from "./providers/EmbedProvider";
+import ExtractProvider from "./providers/ExtractProvider";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement,
@@ -17,9 +18,11 @@ root.render(
         <ThemeProvider>
             <CoverFileProvider>
                 <SecretFileProvider>
-                    <EmbedProvider>
-                        <App />
-                    </EmbedProvider>
+                    <ExtractProvider>
+                        <EmbedProvider>
+                            <App />
+                        </EmbedProvider>
+                    </ExtractProvider>
                 </SecretFileProvider>
             </CoverFileProvider>
         </ThemeProvider>

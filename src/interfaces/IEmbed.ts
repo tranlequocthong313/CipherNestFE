@@ -1,15 +1,23 @@
 import { ReactNode } from "react"
+import { ICoverFile } from "./ICoverFile";
 
 export interface IEmbedState {
     outputQuality: string,
-    freeSpace: number,
     initFreeSpace: number,
     compressed: boolean,
     algorithm: string,
-    usedPercentage: number,
     isLoading?: boolean
 }
 
 export interface IEmbedProps {
     children: ReactNode
+}
+
+export interface IEmbedApi {
+    updateEmbedStatus: (params: {
+        password?: string;
+        coverFileId?: string,
+        outputQuality?: string,
+        coverFile?: ICoverFile,
+    }) => Promise<void>;
 }
