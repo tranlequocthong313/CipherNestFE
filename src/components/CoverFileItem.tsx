@@ -156,7 +156,7 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                             alignItems: "center",
                         }}
                     >
-                        {!selectedCoverFile()?.isEmbedded ??
+                        {!file.isEmbedded &&
                             <Tooltip title={t("addSecret")}>
                                 <IconButton onClick={onAddSecret}>
                                     <AddIcon />

@@ -1,26 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Tooltip, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EmbedIcon from "@mui/icons-material/Download";
 import ExtractIcon from "@mui/icons-material/Upload";
 import useTheme from "../hooks/useTheme";
-import { useCoverFileDispatch } from "../hooks/useCoverFile";
+import { useCoverFileApi, useCoverFileDispatch } from "../hooks/useCoverFile";
 import { v4 as uuid } from "uuid";
 import { getDuration } from "../utils/audio";
 import { useTranslation } from "react-i18next";
 import { isValidFile } from "../utils/validator";
 import EmbedModal from "./EmbedModal";
 import { ICoverFile } from "../interfaces/ICoverFile";
-import HTTP, { coverFileApis } from "../configs/api";
+import HTTP, { coverFileApis, embeddedFileApis } from "../configs/api";
 import { useEmbed, useEmbedApi, useEmbedDispatch } from "../hooks/useEmbed";
+import { useSecretFile } from "../hooks/useSecretFile";
+import { DEBUG } from "../configs/constant";
 
 const CoverFileToolbar: React.FC = () => {
     const { theme } = useTheme();
     const dispatchCoverFiles = useCoverFileDispatch();
-    const { t } = useTranslation(); 
+    const { t } = useTranslation();
     const [openModal, setOpenModal] = useState(false);
     const { outputQuality } = useEmbed()
     const { updateEmbedStatus } = useEmbedApi()
+    const { selectedCoverFile } = useCoverFileApi()
+    const { embeddedFiles, totalSecretFileSize } = useSecretFile()
+    const { openLoading, closeLoading } = useEmbedApi()
 
     const handleFileUpload = async (
         event: React.ChangeEvent<HTMLInputElement>,
@@ -30,7 +35,7 @@ const CoverFileToolbar: React.FC = () => {
             const newFileArray = await Promise.all(
                 Array.from(files).map(async (file) => {
                     if (!isValidFile(file)) {
-                        return null; 
+                        return null;
                     }
                     const duration = await getDuration(file);
                     return {
@@ -39,7 +44,7 @@ const CoverFileToolbar: React.FC = () => {
                         path: file.webkitRelativePath,
                         size: file.size,
                         type: file.type,
-                        id: uuid(), 
+                        id: uuid(),
                         blob: URL.createObjectURL(file),
                         duration: duration,
                         file: file
@@ -57,6 +62,52 @@ const CoverFileToolbar: React.FC = () => {
             });
 
             await updateEmbedStatus({ coverFile: validFiles[0] })
+        }
+    };
+
+    const extractData = async () => {
+        const form = new FormData();
+        const embeddedFile = selectedCoverFile();
+        if (!embeddedFile || !embeddedFile.file || !embeddedFile.isEmbedded) {
+            return;
+        }
+        form.append('embedded_file', embeddedFile.file);
+        if (embeddedFile.password) {
+            form.append('password', embeddedFile.password);
+        }
+        try {
+            openLoading()
+            const res = await HTTP.post(embeddedFileApis.extract, form, {
+                responseType: 'blob',
+            });
+
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+
+            const disposition = res.headers['content-disposition'];
+            let filename = 'extracted_files.zip';
+
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                var matches = filenameRegex.exec(disposition);
+                if (matches != null && matches[1]) {
+                    filename = matches[1].replace(/['"]/g, '');
+                }
+            }
+
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+
+            link.parentNode?.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            if (DEBUG) {
+                console.log('EXTRACT ERR:::', error);
+            }
+        } finally {
+            closeLoading()
         }
     };
 
@@ -98,7 +149,7 @@ const CoverFileToolbar: React.FC = () => {
                         borderRadius: 2,
                         textTransform: "none",
                         display: {
-                            xs: "none", 
+                            xs: "none",
                             sm: "flex",
                         },
                     }}
@@ -131,19 +182,20 @@ const CoverFileToolbar: React.FC = () => {
                     onClick={() => setOpenModal(true)}
                     variant="outlined"
                     startIcon={<EmbedIcon />}
+                    disabled={selectedCoverFile()?.isEmbedded || embeddedFiles.length > 0 || totalSecretFileSize <= 0}
                     sx={{
-                        backgroundColor: theme.palette.background.paper,
+                        backgroundColor: selectedCoverFile()?.isEmbedded || embeddedFiles.length > 0 || totalSecretFileSize <= 0 ? theme.palette.action.disabled : theme.palette.background.paper,
                         "&:hover": {
-                            backgroundColor: theme.palette.action.selected,
+                            backgroundColor: selectedCoverFile()?.isEmbedded || embeddedFiles.length > 0 || totalSecretFileSize <= 0 ? theme.palette.action.disabledBackground : theme.palette.action.selected,
                         },
                         borderRadius: 2,
                         textTransform: "none",
                         display: {
-                            xs: "none", 
+                            xs: "none",
                             sm: "flex",
                         },
                         mr: 1,
-                        color: theme.palette.text.primary,
+                        color: selectedCoverFile()?.isEmbedded || embeddedFiles.length > 0 || totalSecretFileSize <= 0 ? theme.palette.text.disabled : theme.palette.text.primary,
                     }}
                 >
                     {t("embed")}
@@ -171,18 +223,20 @@ const CoverFileToolbar: React.FC = () => {
                 <Button
                     variant="outlined"
                     startIcon={<ExtractIcon />}
+                    disabled={!selectedCoverFile()?.isEmbedded || embeddedFiles.length <= 0}
+                    onClick={extractData}
                     sx={{
-                        backgroundColor: theme.palette.background.paper,
+                        backgroundColor: !selectedCoverFile()?.isEmbedded || embeddedFiles.length <= 0 ? theme.palette.action.disabled : theme.palette.background.paper,
                         "&:hover": {
-                            backgroundColor: theme.palette.action.selected,
+                            backgroundColor: !selectedCoverFile()?.isEmbedded || embeddedFiles.length <= 0 ? theme.palette.action.disabledBackground : theme.palette.action.selected,
                         },
                         borderRadius: 2,
                         textTransform: "none",
                         display: {
-                            xs: "none", 
+                            xs: "none",
                             sm: "flex",
                         },
-                        color: theme.palette.text.primary,
+                        color: !selectedCoverFile()?.isEmbedded || embeddedFiles.length <= 0 ? theme.palette.text.disabled : theme.palette.text.primary,
                     }}
                 >
                     {t("extract")}

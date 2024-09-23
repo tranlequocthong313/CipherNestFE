@@ -110,7 +110,7 @@ const EmbedProvider: React.FC<IEmbedProps> = ({ children }) => {
     return (
         <EmbedContext.Provider value={{ ...embed, isLoading }}>
             <EmbedDispatchContext.Provider value={dispatch}>
-                <EmbedApiContext.Provider value={{ updateEmbedStatus }}>
+                <EmbedApiContext.Provider value={{ updateEmbedStatus, openLoading, closeLoading }}>
                     {children}
                 </EmbedApiContext.Provider>
             </EmbedDispatchContext.Provider>

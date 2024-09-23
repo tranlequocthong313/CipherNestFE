@@ -12,6 +12,7 @@ export interface ICoverFile {
     file?: File;
     version?: string;
     isEmbedded?: boolean;
+    password?: string;
 }
 
 export interface ICoverFileState {

@@ -20,4 +20,6 @@ export interface IEmbedApi {
         outputQuality?: string,
         coverFile?: ICoverFile,
     }) => Promise<void>;
+    openLoading: () => void;
+    closeLoading: () => void;
 }
