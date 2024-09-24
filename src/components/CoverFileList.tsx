@@ -28,9 +28,9 @@ const CoverFileList: React.FC = () => {
     const { files, selectedId } = useCoverFile();
     const dispatchCoverFile = useCoverFileDispatch();
     const dispatchSecretFile = useSecretFileDispatch();
-    const { t } = useTranslation(); // Khai báo hàm t từ useTranslation
+    const { t } = useTranslation(); 
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const { initFreeSpace } = useEmbed();
+    const { freeSpace } = useEmbed();
     const { totalSecretFileSize } = useSecretFile();
     const [message, setMessage] = useState('');
     const { isOpenPasswordModal } = useExtract();
@@ -83,7 +83,7 @@ const CoverFileList: React.FC = () => {
             let exceeded = false;
             for (let file of validFiles) {
                 newSize += file.size;
-                if (newSize > initFreeSpace) {
+                if (newSize > freeSpace) {
                     exceeded = true;
                     newSize -= file.size;
                 } else {
@@ -92,14 +92,15 @@ const CoverFileList: React.FC = () => {
             }
             if (exceeded) {
                 setMessage(
-                    t('fileExceedLimit', { limit: formatFileSize(initFreeSpace) })
+                    t('fileExceedLimit', { limit: formatFileSize(freeSpace) })
                 );
             }
-
             dispatchSecretFile({
                 type: 'ADD',
                 payload: { files: result },
             });
+
+            await updateEmbedStatus({ secretFiles: result });
         }
     };
 

@@ -1,9 +1,10 @@
 import { ReactNode } from "react"
 import { ICoverFile } from "./ICoverFile";
+import { ISecretFile } from "./ISecretFile";
 
 export interface IEmbedState {
     outputQuality: string,
-    initFreeSpace: number,
+    freeSpace: number,
     compressed: boolean,
     algorithm: string,
     isLoading?: boolean
@@ -15,10 +16,11 @@ export interface IEmbedProps {
 
 export interface IEmbedApi {
     updateEmbedStatus: (params: {
-        password?: string;
+        password?: string,
         coverFileId?: string,
-        outputQuality?: string,
         coverFile?: ICoverFile,
+        outputQuality?: string,
+        secretFiles?: ISecretFile[],
     }) => Promise<void>;
     openLoading: () => void;
     closeLoading: () => void;

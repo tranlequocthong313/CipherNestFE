@@ -2,6 +2,7 @@ import axios from 'axios'
 
 export const coverFileApis = {
     coverFileInformation: '/covers/',
+    embed: '/embed/',
 }
 
 export const embeddedFileApis = {

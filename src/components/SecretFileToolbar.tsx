@@ -26,19 +26,17 @@ import { useCoverFile } from "../hooks/useCoverFile";
 
 const SecretFileToolbar = () => {
     const { t } = useTranslation();
-    const { outputQuality, initFreeSpace } = useEmbed()
+    const { outputQuality, freeSpace } = useEmbed()
     const dispatchEmbed = useEmbedDispatch()
     const dispatchSecretFile = useSecretFileDispatch()
     const coverFileState = useCoverFile();
     const { updateEmbedStatus } = useEmbedApi()
     const { totalSecretFileSize } = useSecretFile()
-    const [freeSpace, setFreeSpace] = useState(0)
     const [usedPercentage, setUsedPercentage] = useState(0)
 
     useEffect(() => {
-        setUsedPercentage(Math.min(Math.trunc((totalSecretFileSize / initFreeSpace) * 100), 100))
-        setFreeSpace(initFreeSpace - totalSecretFileSize)
-    }, [initFreeSpace, totalSecretFileSize])
+        setUsedPercentage(Math.min(Math.trunc((totalSecretFileSize / (freeSpace + totalSecretFileSize)) * 100), 100))
+    }, [freeSpace, totalSecretFileSize])
 
     const onChangeQuality = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedValue = event.target.value;
@@ -52,8 +50,9 @@ const SecretFileToolbar = () => {
         dispatchSecretFile({
             type: 'DELETE_ALL',
         })
-        updateEmbedStatus({
-            outputQuality: selectedValue
+        await updateEmbedStatus({
+            outputQuality: selectedValue,
+            secretFiles: []
         })
     };
 
@@ -72,13 +71,11 @@ const SecretFileToolbar = () => {
                 }
             }}
         >
-            {/* Options Output Quality */}
             <FormControl component="fieldset" sx={{ mb: { xs: 3, sm: 0 } }}>
                 <FormLabel
                     component="legend"
                     sx={{
                         color: "text.primary",
-                        // Thêm style để đảm bảo không bị thay đổi khi chọn radio button
                         "&.MuiFormLabel-root": {
                             color: "text.primary",
                         },

@@ -4,7 +4,7 @@ import { TEmbed } from "../types/TEmbed"
 
 export const initialEmbedState: IEmbedState = {
     outputQuality: localStorage.getItem(LOCAL_STORAGE_OUTPUT_QUALITY_KEY) || OUTPUT_QUALITIES.MEDIUM,
-    initFreeSpace: 0,
+    freeSpace: 0,
     compressed: JSON.parse(localStorage.getItem(LOCAL_STORAGE_COMPRESSED_KEY) || "false"),
     algorithm: localStorage.getItem(LOCAL_STORAGE_ALGORITHM_KEY) || ALGORITHMS.LSB,
 }
@@ -20,13 +20,13 @@ const embedReducer = (
     }
     switch (action.type) {
         case "UPDATE_FREE_SPACE": {
-            const { initFreeSpace } = action.payload
-            if (initFreeSpace <= 0) {
+            const { freeSpace } = action.payload
+            if (freeSpace <= 0) {
                 throw new Error("Free space must be greater than 0")
             }
             return {
                 ...state,
-                initFreeSpace,
+                freeSpace,
             }
         }
         case "CHANGE_OUTPUT_QUALITY":
@@ -34,12 +34,12 @@ const embedReducer = (
             return {
                 ...state,
                 outputQuality: action.payload.outputQuality,
-                initFreeSpace: -1,
+                freeSpace: 0,
             }
         case "CLEAR":
             return {
                 ...state,
-                initFreeSpace: -1,
+                freeSpace: 0,
             }
         default:
             return state

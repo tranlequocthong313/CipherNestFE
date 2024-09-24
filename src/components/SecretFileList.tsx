@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Table,
     TableBody,
@@ -10,13 +10,16 @@ import {
     Box,
 } from "@mui/material";
 import SecretFileItem from "./SecretFileItem";
-import { useSecretFile, useSecretFileDispatch } from "../hooks/useSecretFile";
-import { useTranslation } from "react-i18next"; // Thêm import useTranslation
+import { useSecretFile, useSecretFileApi, useSecretFileDispatch } from "../hooks/useSecretFile";
+import { useTranslation } from "react-i18next";
+import { useEmbedApi } from "../hooks/useEmbed";
 
 const SecretFileList: React.FC = () => {
     const { files, selectedId, selectedCoverFileId } = useSecretFile();
     const dispatchSecretFile = useSecretFileDispatch();
-    const { t } = useTranslation(); // Khai báo hàm t từ useTranslation
+    const { t } = useTranslation();
+    const { updateEmbedStatus } = useEmbedApi();
+    const { secretFilesByCoverFile } = useSecretFileApi()
 
     const handleSelect = (id: string) => {
         dispatchSecretFile({
@@ -25,15 +28,13 @@ const SecretFileList: React.FC = () => {
         });
     };
 
-    const handleAddSecret = (id: string) => {
-        // Xử lý thêm secret file
-    };
-
     const handleDelete = async (id: string) => {
         dispatchSecretFile({
             type: "DELETE",
             payload: { id },
         });
+
+        await updateEmbedStatus({ secretFiles: secretFilesByCoverFile().filter(file => file.id !== id) });
     };
 
     return (
