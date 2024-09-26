@@ -18,12 +18,12 @@
   "help": {
     "title": "",
     "section1": {
-      "title": "",
-      "item1": "",
-      "item2": "",
-      "item3": "",
-      "item4": "",
-      "item5": ""
+      "title": "Table of Contents",
+      "item1": "User Guide",
+      "item2": "Embedding Secret File(s)",
+      "item3": "Extracting Secret File(s)",
+      "item4": "Application Architecture Overview",
+      "item5": "Algorithm Overview"
     },
     "section2": {
       "title": "",

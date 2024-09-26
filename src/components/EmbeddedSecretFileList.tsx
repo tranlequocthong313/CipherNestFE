@@ -25,10 +25,6 @@ const EmbeddedSecretFileList: React.FC = () => {
         });
     };
 
-    const handleAddSecret = (id: string) => {
-        // Xử lý thêm secret file
-    };
-
     const handleDelete = async (id: string) => {
         dispatchEmbeddedSecretFile({
             type: "DELETE",

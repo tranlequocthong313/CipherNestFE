@@ -12,10 +12,10 @@ i18n.use(initReactI18next).init({
             translation: viTranslation,
         },
     },
-    lng: "en", // Ngôn ngữ mặc định
-    fallbackLng: "en", // Ngôn ngữ mặc định nếu ngôn ngữ được chọn không có sẵn
+    lng: "en", 
+    fallbackLng: "en", 
     interpolation: {
-        escapeValue: false, // React tự xử lý escape
+        escapeValue: false, 
     },
 });
 

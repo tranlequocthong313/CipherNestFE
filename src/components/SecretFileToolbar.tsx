@@ -35,7 +35,11 @@ const SecretFileToolbar = () => {
     const [usedPercentage, setUsedPercentage] = useState(0)
 
     useEffect(() => {
-        setUsedPercentage(Math.min(Math.trunc((totalSecretFileSize / (freeSpace + totalSecretFileSize)) * 100), 100))
+        if (freeSpace + totalSecretFileSize <= 0) {
+            setUsedPercentage(0)
+        } else {
+            setUsedPercentage(Math.min(Math.trunc((totalSecretFileSize / (freeSpace + totalSecretFileSize)) * 100), 100))
+        }
     }, [freeSpace, totalSecretFileSize])
 
     const onChangeQuality = async (event: React.ChangeEvent<HTMLInputElement>) => {

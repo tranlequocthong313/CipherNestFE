@@ -53,9 +53,7 @@ const AudioPlay: React.FC<IAudioPlayProps> = ({ src, id, onPlay }) => {
             setIsPlaying(!isPlaying);
         }
 
-        if (onPlay) {
-            onPlay(e);
-        }
+        onPlay?.(e);
     };
 
     const onEndAudio = () => {

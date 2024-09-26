@@ -36,7 +36,7 @@ const HomeScreen: React.FC = () => {
                                 <EmbeddedSecretFileToolbar />
                                 <EmbeddedSecretFileList />
                             </>
-                            : // TODO Embedded Secret files
+                            : 
                             <>
                                 <SecretFileToolbar />
                                 <SecretFileList />

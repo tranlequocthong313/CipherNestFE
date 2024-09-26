@@ -73,7 +73,6 @@ const EmbedProvider: React.FC<IEmbedProps> = ({ children }) => {
                         freeSpace: res.data.data,
                     },
                 });
-                console.log("UPDATE::", res.data.data, formatFileSize(res.data.data))
                 return
             }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FormEvent, FormEventHandler, useEffect, useState } from "react";
 import {
     Dialog,
     DialogActions,
@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next";
 import { useCoverFileApi } from "../hooks/useCoverFile";
 import { useSecretFileApi } from "../hooks/useSecretFile";
 import { useEmbed, useEmbedApi } from "../hooks/useEmbed";
-import { DEBUG } from "../configs/constant";
+import { ALGORITHMS, DEBUG } from "../configs/constant";
 import HTTP, { coverFileApis } from "../configs/api";
 
 interface IEmbedModal {
@@ -44,36 +44,6 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
     const { secretFilesByCoverFile } = useSecretFileApi()
     const { outputQuality } = useEmbed()
     const { openLoading, closeLoading } = useEmbedApi()
-
-    const handleAlgorithmChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAlgorithm(event.target.value);
-    };
-
-    const handleCompressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCompressed(event.target.checked);
-    };
-
-    const handleEncryptChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEncrypted(event.target.checked);
-    };
-
-    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value);
-        validatePasswords(event.target.value, confirmPassword);
-    };
-
-    const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setConfirmPassword(event.target.value);
-        validatePasswords(password, event.target.value);
-    };
-
-    const validatePasswords = (password: string, confirmPassword: string) => {
-        if (password && confirmPassword && password !== confirmPassword) {
-            setPasswordError(t("password_mismatch"));
-        } else {
-            setPasswordError("");
-        }
-    };
 
     const handleStartEmbedding = async () => {
         const coverFile = selectedCoverFile()?.file
@@ -100,6 +70,10 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
 
         if (password) {
             form.append('password', password)
+        }
+
+        if (DEBUG) {
+            console.log(form)
         }
 
         try {
@@ -137,8 +111,58 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
         }
     };
 
+
+    useEffect(() => {
+        if (open) {
+            return
+        }
+
+        const resetStates = () => {
+            setAlgorithm("lsb");
+            setCompressed(false);
+            setEncrypted(false);
+            setPassword("");
+            setConfirmPassword("");
+            setProgress(0);
+            setRemainingTime("00:00");
+            setPasswordError("");
+        }
+
+        resetStates()
+    }, [open])
+
+    const handleAlgorithmChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAlgorithm(event.target.value);
+    };
+
+    const handleCompressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCompressed(event.target.checked);
+    };
+
+    const handleEncryptChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEncrypted(event.target.checked);
+    };
+
+    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
+        validatePasswords(event.target.value, confirmPassword);
+    };
+
+    const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setConfirmPassword(event.target.value);
+        validatePasswords(password, event.target.value);
+    };
+
+    const validatePasswords = (password: string, confirmPassword: string) => {
+        if (password && confirmPassword && password !== confirmPassword) {
+            setPasswordError(t("password_mismatch"));
+        } else {
+            setPasswordError("");
+        }
+    };
+
     return (
-        <Dialog open={open} onClose={onClose} PaperProps={{ style: { backgroundColor: theme.palette.background.default } }}>
+        <Dialog open={open} onClose={onClose} PaperProps={{ style: { backgroundColor: theme.palette.background.default } }} onKeyPress={(e) => e.key === 'Enter' && handleStartEmbedding()}>
             <DialogTitle>{t("steganography_options")}</DialogTitle>
             <DialogContent>
                 <FormControl component="fieldset" fullWidth>
@@ -167,26 +191,13 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
                             },
                         }}
                     >
-                        <FormControlLabel
-                            value="lsb"
-                            control={<Radio />}
-                            label={t("LSB")}
-                        />
-                        <FormControlLabel
-                            value="amplitude"
-                            control={<Radio />}
-                            label={t("Amplitude Coding")}
-                        />
-                        <FormControlLabel
-                            value="echo"
-                            control={<Radio />}
-                            label={t("Echo Hiding")}
-                        />
-                        <FormControlLabel
-                            value="spread"
-                            control={<Radio />}
-                            label={t("Spread Spectrum")}
-                        />
+                        {Object.entries(ALGORITHMS).map(([k, v]) =>
+                            <FormControlLabel
+                                value={k.toLowerCase()}
+                                control={<Radio />}
+                                label={t(v)}
+                            />
+                        )}
                     </RadioGroup>
                 </FormControl>
                 <FormControl component="fieldset" fullWidth>
@@ -285,7 +296,6 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
                     {t("cancel")}
                 </Button>
                 <Button
-                    onClick={handleStartEmbedding}
                     color="primary"
                     variant="contained"
                     sx={{
@@ -295,6 +305,7 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
                         },
                         boxShadow: 3,
                     }}
+                    type='submit'
                 >
                     {t("start_embedding")}
                 </Button>

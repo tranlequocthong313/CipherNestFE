@@ -35,11 +35,31 @@ const HelpScreen: React.FC = () => {
                                     }
                                 />
                             </ListItem>
+                            <List sx={{ ml: 6 }}>
+                                <ListItem>
+                                    <ListItemText
+                                        primary={
+                                            <Link href="#1.1" variant="body1">
+                                                1.1 &nbsp; {t("help.section1.item2")}
+                                            </Link>
+                                        }
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText
+                                        primary={
+                                            <Link href="#1.2" variant="body1">
+                                                1.2 &nbsp; {t("help.section1.item3")}
+                                            </Link>
+                                        }
+                                    />
+                                </ListItem>
+                            </List>
                             <ListItem>
                                 <ListItemText
                                     primary={
-                                        <Link href="#1.1" variant="body1">
-                                            1.1 &nbsp; {t("help.section1.item2")}
+                                        <Link href="#2" variant="body1">
+                                            2 &nbsp; {t("help.section1.item4")}
                                         </Link>
                                     }
                                 />
@@ -47,26 +67,8 @@ const HelpScreen: React.FC = () => {
                             <ListItem>
                                 <ListItemText
                                     primary={
-                                        <Link href="#1.2" variant="body1">
-                                            1.2 &nbsp; {t("help.section1.item3")}
-                                        </Link>
-                                    }
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemText
-                                    primary={
-                                        <Link href="#1.3" variant="body1">
-                                            1.3 &nbsp; {t("help.section1.item4")}
-                                        </Link>
-                                    }
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemText
-                                    primary={
-                                        <Link href="#1.4" variant="body1">
-                                            1.4 &nbsp; {t("help.section1.item5")}
+                                        <Link href="#3" variant="body1">
+                                            3 &nbsp; {t("help.section1.item5")}
                                         </Link>
                                     }
                                 />

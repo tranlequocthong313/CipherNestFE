@@ -21,10 +21,9 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({ open, onClose }) => {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        // Load saved settings from localStorage
         const savedLanguage = localStorage.getItem("language") || "en";
         setLanguage(savedLanguage);
-        i18n.changeLanguage(savedLanguage); // Apply saved language
+        i18n.changeLanguage(savedLanguage); 
     }, [i18n]);
 
     const onModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,8 +34,8 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({ open, onClose }) => {
     const handleLanguageChange = (event: SelectChangeEvent) => {
         const newLanguage = event.target.value as string;
         setLanguage(newLanguage);
-        localStorage.setItem("language", newLanguage); // Save language to localStorage
-        i18n.changeLanguage(newLanguage); // Change language
+        localStorage.setItem("language", newLanguage); 
+        i18n.changeLanguage(newLanguage); 
     };
 
     return (

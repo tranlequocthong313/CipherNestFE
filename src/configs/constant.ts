@@ -4,9 +4,6 @@ export const ENV = process.env.REACT_APP_ENVIRONMENT || "development";
 
 export const ALGORITHMS = Object.freeze({
     LSB: "LSB",
-    ECHO_HIDING: "Echo Hiding",
-    AMPLITUDE_CODING: "Amplitude Coding",
-    SPREAD_SPECTRUM: "Spread Spectrum",
 });
 
 export const OUTPUT_QUALITIES = Object.freeze({
@@ -31,3 +28,6 @@ export const CODES = Object.freeze({
     WRONG_PASSWORD: "06",
     DATA_CORRUPTED: "07",
 })
+
+export const MIME_TYPE_OF_SUPPORTED_AUDIO_FORMATS = ['audio/wav', 'audio/flac']
+export const EXTENSION_OF_SUPPORTED_AUDIO_FORMATS = ['.wav', '.flac', '.aiff']

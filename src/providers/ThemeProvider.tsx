@@ -8,7 +8,6 @@ const ThemeProvider: React.FC<IThemeProviderProps> = ({ children }) => {
     const [theme, setTheme] = useState(getMatrixTheme(mode));
 
     useEffect(() => {
-        // Load saved settings from localStorage
         const savedMode = localStorage.getItem('themeMode') as 'light' | 'dark';
         if (savedMode) {
             setMode(savedMode);
@@ -21,7 +20,7 @@ const ThemeProvider: React.FC<IThemeProviderProps> = ({ children }) => {
 
     const handleModeChange = (newMode: 'light' | 'dark') => {
         setMode(newMode);
-        localStorage.setItem('themeMode', newMode); // Save theme mode to localStorage
+        localStorage.setItem('themeMode', newMode); 
     };
 
     const value: ITheme = {

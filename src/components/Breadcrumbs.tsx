@@ -4,14 +4,12 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 
 const routeNameMap: { [key: string]: string } = {
     "/help": "Help",
-    // Add more routes as needed
 };
 
 const Breadcrumbs = () => {
     const location = useLocation();
     const pathnames = location.pathname.split("/").filter((x) => x);
 
-    // Nếu không có pathnames, chúng ta đang ở trang chủ, không hiển thị breadcrumbs
     if (pathnames.length === 0) {
         return null;
     }

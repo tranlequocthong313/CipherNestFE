@@ -32,6 +32,7 @@ import Dialog from './Dialog'
 import PasswordModal from "./PasswordModal";
 import { useCoverFileApi, useCoverFileDispatch } from "../hooks/useCoverFile";
 import { useExtract, useExtractDispatch } from "../hooks/useExtract";
+import { MIME_TYPE_OF_SUPPORTED_AUDIO_FORMATS } from "../configs/constant";
 
 const Mp3Icon = styled(MusicNoteIcon)(({ theme }) => ({
     marginRight: theme.spacing(1),
@@ -50,14 +51,14 @@ const StyledTableRow = styled(TableRow, {
 })<{ isSelected: boolean }>(({ theme, isSelected }) => ({
     backgroundColor: isSelected
         ? theme.palette.action.selected
-        : theme.palette.background.paper, // Màu nền khi được chọn
-    cursor: "pointer", // Thay đổi con trỏ chuột khi hover
+        : theme.palette.background.paper, 
+    cursor: "pointer", 
     "&:hover": {
         backgroundColor: isSelected
-            ? theme.palette.action.selected // Nền khi được chọn
-            : theme.palette.action.hover, // Nền khi hover
+            ? theme.palette.action.selected 
+            : theme.palette.action.hover, 
     },
-    transition: "background-color 0.3s ease", // Hiệu ứng chuyển màu nền
+    transition: "background-color 0.3s ease", 
 }));
 
 const icons: { [key: string]: React.ElementType } = {
@@ -75,7 +76,7 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
     onPlay,
 }) => {
     const theme = useTheme();
-    const { t } = useTranslation(); 
+    const { t } = useTranslation();
     const Icon = icons[file.type] || Mp3Icon;
     const [openConfirm, setOpenConfirm] = useState(false);
     const dispatchCoverFile = useCoverFileDispatch()
@@ -91,8 +92,8 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
     };
 
     const handleConfirmDelete = () => {
-        onDelete(); 
-        handleCloseConfirm(); 
+        onDelete();
+        handleCloseConfirm();
     };
 
     const handleClosePasswordModal = () => {
@@ -163,17 +164,20 @@ const CoverFileItem: React.FC<ICoverFileItemProps> = ({
                                 </IconButton>
                             </Tooltip>
                         }
-                        <AudioPlay onPlay={e => {
-                            e.stopPropagation()
-                            onActionSelect(file.id)
-                            if (onPlay) {
-                                onPlay()
-                            }
-                        }} src={file.blob} id={file.id} />
+                        {
+                            MIME_TYPE_OF_SUPPORTED_AUDIO_FORMATS.includes(file.type) &&
+                            <AudioPlay onPlay={e => {
+                                e.stopPropagation()
+                                onActionSelect(file.id)
+                                if (onPlay) {
+                                    onPlay()
+                                }
+                            }} src={file.blob} id={file.id} />
+                        }
                         <Tooltip title={t("deleteFile")}>
                             <IconButton
                                 onClick={(e) => {
-                                    e.stopPropagation(); 
+                                    e.stopPropagation();
                                     onActionSelect(file.id)
                                     handleOpenConfirm();
                                 }}

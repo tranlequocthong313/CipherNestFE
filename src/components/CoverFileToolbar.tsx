@@ -13,8 +13,8 @@ import EmbedModal from "./EmbedModal";
 import { ICoverFile } from "../interfaces/ICoverFile";
 import HTTP, { coverFileApis, embeddedFileApis } from "../configs/api";
 import { useEmbed, useEmbedApi, useEmbedDispatch } from "../hooks/useEmbed";
-import { useSecretFile } from "../hooks/useSecretFile";
-import { DEBUG } from "../configs/constant";
+import { useSecretFile, useSecretFileDispatch } from "../hooks/useSecretFile";
+import { DEBUG, EXTENSION_OF_SUPPORTED_AUDIO_FORMATS } from "../configs/constant";
 
 const CoverFileToolbar: React.FC = () => {
     const { theme } = useTheme();
@@ -26,6 +26,7 @@ const CoverFileToolbar: React.FC = () => {
     const { selectedCoverFile } = useCoverFileApi()
     const { embeddedFiles, totalSecretFileSize } = useSecretFile()
     const { openLoading, closeLoading } = useEmbedApi()
+    const dispatchSecretFile = useSecretFileDispatch()
 
     const handleFileUpload = async (
         event: React.ChangeEvent<HTMLInputElement>,
@@ -37,7 +38,11 @@ const CoverFileToolbar: React.FC = () => {
                     if (!isValidFile(file)) {
                         return null;
                     }
-                    const duration = await getDuration(file);
+                    let duration = null
+                    try {
+                        duration = await getDuration(file);
+                    } catch (error) {
+                    }
                     return {
                         name: file.name,
                         lastModified: file.lastModified,
@@ -61,6 +66,11 @@ const CoverFileToolbar: React.FC = () => {
                 payload: { files: validFiles },
             });
 
+            dispatchSecretFile({
+                type: 'SELECT_COVER_FILE',
+                payload: { coverFileId: validFiles[0].id },
+            });
+
             await updateEmbedStatus({ coverFile: validFiles[0] })
         }
     };
@@ -74,6 +84,9 @@ const CoverFileToolbar: React.FC = () => {
         form.append('embedded_file', embeddedFile.file);
         if (embeddedFile.password) {
             form.append('password', embeddedFile.password);
+        }
+        if (DEBUG) {
+            console.log(form)
         }
         try {
             openLoading()
@@ -129,7 +142,7 @@ const CoverFileToolbar: React.FC = () => {
             }}
         >
             <input
-                accept=".wav,.mp3,.flac"
+                accept={EXTENSION_OF_SUPPORTED_AUDIO_FORMATS.join(',')}
                 style={{ display: "none" }}
                 id="upload-music-file"
                 type="file"

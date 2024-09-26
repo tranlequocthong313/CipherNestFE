@@ -8,7 +8,7 @@ export interface ICoverFile {
     type: string;
     lastModified: number;
     blob: string;
-    duration: number;
+    duration?: number | null;
     file?: File;
     version?: string;
     isEmbedded?: boolean;
