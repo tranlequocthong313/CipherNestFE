@@ -53,7 +53,7 @@ const PasswordModal: React.FC<IPasswordModalProps> = ({
     }
 
     return (
-        <Dialog open={open} onClose={onClose} PaperProps={{ style: { backgroundColor: theme.palette.background.paper } }}>
+        <Dialog open={open} onClose={onClose} PaperProps={{ style: { backgroundColor: theme.palette.background.paper } }} onKeyPress={(e) => e.key === 'Enter' && handleUnlock()}>
             <DialogTitle>{title}</DialogTitle>
             <DialogContent>
                 <TextField
