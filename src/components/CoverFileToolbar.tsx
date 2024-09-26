@@ -86,7 +86,7 @@ const CoverFileToolbar: React.FC = () => {
             form.append('password', embeddedFile.password);
         }
         if (DEBUG) {
-            console.log(form)
+            console.log("EXTRACT::", form)
         }
         try {
             openLoading()

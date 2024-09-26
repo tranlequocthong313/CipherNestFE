@@ -37,8 +37,6 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
     const [encrypted, setEncrypted] = useState(false);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [progress, setProgress] = useState(0); // Dummy value for progress
-    const [remainingTime, setRemainingTime] = useState("00:00"); // Dummy value for remaining time
     const [passwordError, setPasswordError] = useState("");
     const { selectedCoverFile } = useCoverFileApi()
     const { secretFilesByCoverFile } = useSecretFileApi()
@@ -73,7 +71,7 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
         }
 
         if (DEBUG) {
-            console.log(form)
+            console.log("EMBED:::", form)
         }
 
         try {
@@ -123,8 +121,6 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
             setEncrypted(false);
             setPassword("");
             setConfirmPassword("");
-            setProgress(0);
-            setRemainingTime("00:00");
             setPasswordError("");
         }
 
@@ -193,6 +189,7 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
                     >
                         {Object.entries(ALGORITHMS).map(([k, v]) =>
                             <FormControlLabel
+                                key={k}
                                 value={k.toLowerCase()}
                                 control={<Radio />}
                                 label={t(v)}
@@ -200,7 +197,7 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
                         )}
                     </RadioGroup>
                 </FormControl>
-                <FormControl component="fieldset" fullWidth>
+                <FormControl component="fieldset" fullWidth sx={{ mt: 2 }}>
                     <FormLabel component="legend"
                         sx={{
                             color: "text.primary",
@@ -272,15 +269,6 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
                         helperText={passwordError}
                     />
                 </FormControl>
-                <Box sx={{ mt: 2 }}>
-                    <Typography variant="body2">{t("progress")}: {progress}%</Typography>
-                    <LinearProgress
-                        variant="determinate"
-                        value={progress}
-                        sx={{ height: 15, borderRadius: 5, mt: 1 }}
-                    />
-                    <Typography variant="caption" sx={{ mt: 1 }}>{t("remaining_time")}: {remainingTime}</Typography>
-                </Box>
             </DialogContent>
             <DialogActions>
                 <Button
@@ -296,6 +284,7 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
                     {t("cancel")}
                 </Button>
                 <Button
+                    onClick={handleStartEmbedding}
                     color="primary"
                     variant="contained"
                     sx={{
