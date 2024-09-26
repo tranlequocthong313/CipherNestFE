@@ -10,13 +10,13 @@ import {
     Box,
 } from "@mui/material";
 import EmbeddedSecretFileItem from "./EmbeddedSecretFileItem";
-import { useTranslation } from "react-i18next"; // Thêm import useTranslation
+import { useTranslation } from "react-i18next"; 
 import { useSecretFile, useSecretFileDispatch } from "../hooks/useSecretFile";
 
 const EmbeddedSecretFileList: React.FC = () => {
     const { embeddedFiles, selectedId, selectedCoverFileId } = useSecretFile()
     const dispatchEmbeddedSecretFile = useSecretFileDispatch();
-    const { t } = useTranslation(); // Khai báo hàm t từ useTranslation
+    const { t } = useTranslation(); 
 
     const handleSelect = (id: string) => {
         dispatchEmbeddedSecretFile({
@@ -38,7 +38,7 @@ const EmbeddedSecretFileList: React.FC = () => {
                 component={Paper}
                 sx={{
                     maxHeight: 427,
-                    overflow: "auto", // Kích hoạt cuộn khi cần
+                    overflow: "auto", 
                 }}
             >
                 <Table stickyHeader>

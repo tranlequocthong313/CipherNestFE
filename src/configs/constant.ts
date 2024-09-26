@@ -10,7 +10,7 @@ export const OUTPUT_QUALITIES = Object.freeze({
     VERY_LOW: 'very_low',
     LOW: 'low',
     MEDIUM: 'medium',
-    high: 'high',
+    HIGH: 'high',
 })
 
 export const LOCAL_STORAGE_OUTPUT_QUALITY_KEY = "outputQuality"

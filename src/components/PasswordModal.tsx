@@ -66,7 +66,7 @@ const PasswordModal: React.FC<IPasswordModalProps> = ({
                     value={password}
                     onChange={(e) => {
                         setPassword(e.target.value);
-                        setError(""); // Clear error on change
+                        setError(""); 
                     }}
                     helperText={error}
                     error={!!error}
@@ -75,17 +75,17 @@ const PasswordModal: React.FC<IPasswordModalProps> = ({
             <DialogActions>
                 <Button
                     onClick={close}
-                    color="inherit" // Use 'inherit' to match theme color
-                    variant="outlined" // Use outlined variant for a subdued look
+                    color="inherit" 
+                    variant="outlined" 
                 >
                     {t("cancel")}
                 </Button>
                 <Button
                     onClick={handleUnlock}
-                    color="primary" // Use primary color to make it stand out
-                    variant="contained" // Use contained variant for a more prominent button
+                    color="primary" 
+                    variant="contained" 
                     sx={{
-                        ml: 2 // Add margin to separate the buttons
+                        ml: 2 
                     }}
                 >
                     {t("ok")}

@@ -43,7 +43,7 @@ const SecretFileList: React.FC = () => {
                 component={Paper}
                 sx={{
                     maxHeight: 427,
-                    overflow: "auto", // Kích hoạt cuộn khi cần
+                    overflow: "auto", 
                 }}
             >
                 <Table stickyHeader>

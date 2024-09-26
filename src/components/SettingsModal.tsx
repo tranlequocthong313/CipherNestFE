@@ -49,7 +49,7 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({ open, onClose }) => {
                     position: "absolute",
                     top: "50%",
                     left: "50%",
-                    transform: "translate(-50%, -70%)", // Căn giữa theo cả hai chiều
+                    transform: "translate(-50%, -70%)", 
                 }}
             >
                 <Typography variant="h5">{t("settings.title")}</Typography>
@@ -68,7 +68,7 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({ open, onClose }) => {
                                 />
                             }
                             label={<Typography>{t("settings.darkMode")}</Typography>}
-                            labelPlacement="start" // Đặt label nằm ngang bên trái switch
+                            labelPlacement="start" 
                             sx={{ mr: "auto", ml: 1, mt: 1 }}
                         />
                     </FormControl>

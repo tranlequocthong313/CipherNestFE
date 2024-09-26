@@ -101,8 +101,8 @@ const SecretFileItem: React.FC<ISecretFileItemProps> = ({
     };
 
     const handleConfirmDelete = () => {
-        onDelete(); // Thực hiện hành động xóa
-        handleCloseConfirm(); // Đóng hộp thoại
+        onDelete(); 
+        handleCloseConfirm(); 
     };
 
     return (
