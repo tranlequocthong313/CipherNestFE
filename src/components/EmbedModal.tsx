@@ -23,6 +23,7 @@ import { useSecretFileApi } from "../hooks/useSecretFile";
 import { useEmbed, useEmbedApi } from "../hooks/useEmbed";
 import { ALGORITHMS, DEBUG } from "../configs/constant";
 import HTTP, { coverFileApis } from "../configs/api";
+import useDownload from "../hooks/useDownload";
 
 interface IEmbedModal {
     open: boolean;
@@ -42,6 +43,7 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
     const { secretFilesByCoverFile } = useSecretFileApi()
     const { outputQuality } = useEmbed()
     const { openLoading, closeLoading } = useEmbedApi()
+    const download = useDownload()
 
     const handleStartEmbedding = async () => {
         const coverFile = selectedCoverFile()?.file
@@ -76,30 +78,7 @@ const EmbedModal: React.FC<IEmbedModal> = ({ open, onClose }) => {
 
         try {
             openLoading()
-            const res = await HTTP.post(coverFileApis.embed, form, {
-                responseType: 'blob'
-            })
-            const url = window.URL.createObjectURL(new Blob([res.data]));
-            const link = document.createElement('a');
-            link.href = url;
-
-            const disposition = res.headers['content-disposition'];
-            let filename = 'extracted_files.zip';
-
-            if (disposition && disposition.indexOf('attachment') !== -1) {
-                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                var matches = filenameRegex.exec(disposition);
-                if (matches != null && matches[1]) {
-                    filename = matches[1].replace(/['"]/g, '');
-                }
-            }
-
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
-
-            link.parentNode?.removeChild(link);
-            window.URL.revokeObjectURL(url);
+            await download(coverFileApis.embed, form, coverFile.name)
         } catch (error) {
             if (DEBUG) {
                 console.log('EMBED ERR:::', error)

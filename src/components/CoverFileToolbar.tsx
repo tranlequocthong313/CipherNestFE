@@ -15,6 +15,7 @@ import HTTP, { coverFileApis, embeddedFileApis } from "../configs/api";
 import { useEmbed, useEmbedApi, useEmbedDispatch } from "../hooks/useEmbed";
 import { useSecretFile, useSecretFileDispatch } from "../hooks/useSecretFile";
 import { DEBUG, EXTENSION_OF_SUPPORTED_AUDIO_FORMATS } from "../configs/constant";
+import useDownload from "../hooks/useDownload";
 
 const CoverFileToolbar: React.FC = () => {
     const { theme } = useTheme();
@@ -27,6 +28,7 @@ const CoverFileToolbar: React.FC = () => {
     const { embeddedFiles, totalSecretFileSize } = useSecretFile()
     const { openLoading, closeLoading } = useEmbedApi()
     const dispatchSecretFile = useSecretFileDispatch()
+    const download = useDownload()
 
     const handleFileUpload = async (
         event: React.ChangeEvent<HTMLInputElement>,
@@ -90,31 +92,7 @@ const CoverFileToolbar: React.FC = () => {
         }
         try {
             openLoading()
-            const res = await HTTP.post(embeddedFileApis.extract, form, {
-                responseType: 'blob',
-            });
-
-            const url = window.URL.createObjectURL(new Blob([res.data]));
-            const link = document.createElement('a');
-            link.href = url;
-
-            const disposition = res.headers['content-disposition'];
-            let filename = 'extracted_files.zip';
-
-            if (disposition && disposition.indexOf('attachment') !== -1) {
-                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                var matches = filenameRegex.exec(disposition);
-                if (matches != null && matches[1]) {
-                    filename = matches[1].replace(/['"]/g, '');
-                }
-            }
-
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
-
-            link.parentNode?.removeChild(link);
-            window.URL.revokeObjectURL(url);
+            await download(embeddedFileApis.extract, form, 'extracted_files.zip')
         } catch (error) {
             if (DEBUG) {
                 console.log('EXTRACT ERR:::', error);
