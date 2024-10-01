@@ -29,5 +29,5 @@ export const CODES = Object.freeze({
     DATA_CORRUPTED: "07",
 })
 
-export const MIME_TYPE_OF_SUPPORTED_AUDIO_FORMATS = ['audio/x-wav', 'audio/flac']
+export const MIME_TYPE_OF_SUPPORTED_AUDIO_FORMATS = ['audio/x-wav', 'audio/flac', 'audio/wav'] // x-wav and wav what's the difference?
 export const EXTENSION_OF_SUPPORTED_AUDIO_FORMATS = ['.wav', '.flac', '.aiff']

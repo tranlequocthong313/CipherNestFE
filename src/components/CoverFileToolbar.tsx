@@ -63,17 +63,19 @@ const CoverFileToolbar: React.FC = () => {
                 (file): file is NonNullable<typeof file> => file !== null,
             );
 
-            dispatchCoverFiles({
-                type: "ADD",
-                payload: { files: validFiles },
-            });
+            if (validFiles.length) {
+                dispatchCoverFiles({
+                    type: "ADD",
+                    payload: { files: validFiles },
+                });
 
-            dispatchSecretFile({
-                type: 'SELECT_COVER_FILE',
-                payload: { coverFileId: validFiles[0].id },
-            });
+                dispatchSecretFile({
+                    type: 'SELECT_COVER_FILE',
+                    payload: { coverFileId: validFiles[0].id },
+                });
 
-            await updateEmbedStatus({ coverFile: validFiles[0] })
+                await updateEmbedStatus({ coverFile: validFiles[0] })
+            }
         }
     };
 
