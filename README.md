@@ -1,48 +1,111 @@
-# Getting Started with Create React App
+# CipherNestFE - Frontend (ReactJS)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**CipherNestFE** là phần frontend của ứng dụng **CipherNest**, được phát triển bằng ReactJS. Phần frontend này cung cấp giao diện người dùng trực quan để tương tác với các tính năng mã hóa và giải mã thông tin trong file âm thanh (Audio Steganography). Ứng dụng kết nối với backend Django để xử lý logic nghiệp vụ.
 
-## Available Scripts
+## Tính năng chính
 
-In the project directory, you can run:
+- **Mã hóa thông tin vào file âm thanh**: Người dùng có thể tải lên một file âm thanh và nhập thông tin bí mật để ẩn vào file đó.
+- **Giải mã thông tin từ file âm thanh**: Người dùng có thể tải lên file âm thanh đã được mã hóa để trích xuất thông tin bí mật.
+- **Hỗ trợ nhiều định dạng âm thanh**: Ứng dụng hỗ trợ các định dạng âm thanh phổ biến như WAV, MP3, v.v.
+- **Giao diện trực quan**: Dễ dàng sử dụng với giao diện web thân thiện, được xây dựng bằng ReactJS và các thư viện UI như Material-UI hoặc Bootstrap.
 
-### `npm start`
+## Công nghệ sử dụng
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Frontend**: ReactJS, React Router, Axios
+- **Styling**: CSS, SCSS, hoặc CSS-in-JS (Styled Components, Emotion)
+- **State Management**: Redux hoặc Context API (tùy chọn)
+- **API**: Kết nối với backend Django thông qua RESTful API
+- **Build Tool**: Webpack (được cấu hình sẵn bởi Create React App)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Cài đặt và chạy dự án
 
-### `npm test`
+### Yêu cầu hệ thống
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js (phiên bản 14.x trở lên)
+- npm hoặc yarn
 
-### `npm run build`
+### Các bước cài đặt
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Clone dự án**:
+   ```bash
+   git clone https://github.com/tranlequocthong313/CipherNestFE.git
+   cd CipherNestFE
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. **Cài đặt các dependencies**:
+   ```bash
+   npm install
+   # hoặc
+   yarn install
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. **Chạy dự án**:
+   ```bash
+   npm start
+   # hoặc
+   yarn start
+   ```
 
-### `npm run eject`
+4. **Truy cập ứng dụng**:
+   - Mở trình duyệt và truy cập vào địa chỉ: `http://localhost:3000`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Cấu hình môi trường
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Tạo file `.env` trong thư mục gốc của dự án và thêm các biến môi trường cần thiết (nếu có):
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```env
+REACT_APP_API_URL=http://localhost:8000/api
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Cấu trúc thư mục
 
-## Learn More
+```
+CipherNestFE/
+├── public/                  # Thư mục chứa các file tĩnh (index.html, favicon, v.v.)
+├── src/                     # Source code chính
+│   ├── assets/              # Hình ảnh, font, và các file tĩnh khác
+│   ├── components/          # Các component ReactJS
+│   ├── pages/               # Các trang chính của ứng dụng
+│   ├── services/            # Các service để gọi API
+│   ├── styles/              # File CSS/SCSS hoặc CSS-in-JS
+│   ├── utils/               # Các hàm tiện ích
+│   ├── App.js               # Component chính
+│   ├── index.js             # File entry point
+│   └── routes.js            # Cấu hình React Router (nếu có)
+├── .env                     # File cấu hình môi trường
+├── package.json             # Danh sách dependencies và scripts
+└── README.md                # Tài liệu hướng dẫn
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Các trang chính
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Trang chủ**: Giới thiệu về ứng dụng và hướng dẫn sử dụng.
+- **Trang mã hóa**: Cho phép người dùng tải lên file âm thanh và nhập thông tin bí mật để mã hóa.
+- **Trang giải mã**: Cho phép người dùng tải lên file âm thanh đã được mã hóa để trích xuất thông tin bí mật.
 
-# CipherNestFE
+## Kết nối với Backend
+
+Frontend kết nối với backend Django thông qua các API endpoints sau:
+
+- **Mã hóa thông tin**:
+  - `POST /api/encode/` - Gửi file âm thanh và thông tin bí mật để mã hóa.
+- **Giải mã thông tin**:
+  - `POST /api/decode/` - Gửi file âm thanh đã được mã hóa để giải mã.
+
+## Đóng góp
+
+Nếu bạn muốn đóng góp vào dự án, vui lòng làm theo các bước sau:
+
+1. Fork dự án
+2. Tạo branch mới (`git checkout -b feature/YourFeatureName`)
+3. Commit các thay đổi (`git commit -m 'Add some feature'`)
+4. Push lên branch (`git push origin feature/YourFeatureName`)
+5. Mở một Pull Request
+
+## Liên hệ
+
+Nếu bạn có bất kỳ câu hỏi hoặc góp ý nào, vui lòng liên hệ:
+
+- **Tên**: Trần Lê Quốc Thông
+- **Email**: tranlequocthong313@gmail.com
+- **GitHub**: [tranlequocthong313](https://github.com/tranlequocthong313)
