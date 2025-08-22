@@ -147,9 +147,9 @@ const CoverFileToolbar: React.FC = () => {
                         },
                     }}
                 >
-                    {t("add_cover_file")}
+                    {t("add_cover_file")} {`(${EXTENSION_OF_SUPPORTED_AUDIO_FORMATS.join(',')})`}
                 </Button>
-                <Tooltip title={t("add_cover_file_tooltip")}>
+                <Tooltip title={`${t("add_cover_file_tooltip")} ${`(${EXTENSION_OF_SUPPORTED_AUDIO_FORMATS.join(',')})`}`}>
                     <IconButton
                         color="primary"
                         component="span"
